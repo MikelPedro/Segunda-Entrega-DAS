@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">Primera-Entrega-DAS</string>
+    <string name="app_name">Preguntas</string>
+    <string name="favorito">Favorito</string>
 </resources>
