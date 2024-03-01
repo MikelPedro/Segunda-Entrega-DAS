@@ -6,10 +6,10 @@ public class ModeloTemas {
     private String titulo;
     private String descripcion;
 
-    public ModeloTemas(int imagenId, String titulo) {
-        this.imagenId = imagenId;
+    public ModeloTemas(String titulo, String descripcion, int imagenId) {
         this.titulo = titulo;
         this.descripcion = descripcion;
+        this.imagenId = imagenId;
     }
 
 

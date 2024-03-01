@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         // Inicia la actividad
         this.startActivity(intent);
         //getContext().startActivity(intent);
-        finish();
+        //finish(); si le das al triangulo no puedes volver atras
     }
 
 }
