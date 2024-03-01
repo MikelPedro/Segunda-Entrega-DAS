@@ -3,7 +3,7 @@
     <string name="favorito">Favorito</string>
     <string name="nombre_titulo">Titulo</string>
     <string name="nombre_descripcion">Cosas varias que espero que quepa</string>
-    
+
     <string-array name="titulos_temas">
         <item>Ingenieria</item>
         <item>Arte</item>
