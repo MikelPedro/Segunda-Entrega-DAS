@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 public class IntermedioJugarCrear extends AppCompatActivity {
 
@@ -12,6 +13,16 @@ public class IntermedioJugarCrear extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intermedio_jugar_crear);
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            String tema = extras.getString("Tema");
+
+
+            TextView temaTextView = findViewById(R.id.textViewTemaInter);
+
+            temaTextView.setText(String.format("Tema: %s", tema));
+        }
     }
 
     public void OnClickJugar(View v){

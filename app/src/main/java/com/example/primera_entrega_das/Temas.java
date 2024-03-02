@@ -4,13 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 
 import java.util.ArrayList;
 
-public class Temas extends AppCompatActivity {
+public class Temas extends AppCompatActivity implements RecyclerViewInterface{
 
     ArrayList<ModeloTemas> modeloTemas = new ArrayList<>();
 
@@ -23,7 +24,7 @@ public class Temas extends AppCompatActivity {
 
         RecyclerView recyclerView = findViewById(R.id.miRecyclerView);
         crearModeloTemas();
-        TemasAdaptadorRecycler adapter = new TemasAdaptadorRecycler(this,modeloTemas);
+        TemasAdaptadorRecycler adapter = new TemasAdaptadorRecycler(this,modeloTemas,this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
@@ -38,5 +39,15 @@ public class Temas extends AppCompatActivity {
         for(int i = 0; i < titulosTemas.length; i++){
             modeloTemas.add(new ModeloTemas(titulosTemas[i], dcpTemas[i], imagenes[i]));
         }
+    }
+
+    @Override
+    public void onItemClick(int posicion) {
+
+        Intent intent = new Intent(Temas.this,IntermedioJugarCrear.class);
+        //pasar el nombre del tema a la otra actividad
+        intent.putExtra("Tema",modeloTemas.get(posicion).getTitulo());
+        startActivity(intent);
+        finish();
     }
 }
