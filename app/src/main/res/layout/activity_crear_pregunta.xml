@@ -11,8 +11,8 @@
         android:layout_width="280dp"
         android:layout_height="59dp"
         android:ems="10"
-        android:inputType="text"
         android:hint="Ingrese la pregunta"
+        android:inputType="text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -95,10 +95,11 @@
         android:id="@+id/button2"
         android:layout_width="190dp"
         android:layout_height="59dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="16dp"
         android:onClick="OnClickPregunta"
         android:text="Guardar Pregunta"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
 
@@ -111,5 +112,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button2" />
+
+    <TextView
+        android:id="@+id/textTema"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="93dp"
+        android:text="TextView"
+        app:layout_constraintBottom_toBottomOf="@+id/laPregunta"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
