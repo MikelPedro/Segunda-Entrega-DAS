@@ -7,12 +7,12 @@
     tools:context=".CrearPregunta">
 
     <EditText
-        android:id="@+id/editTextText3"
+        android:id="@+id/laPregunta"
         android:layout_width="280dp"
         android:layout_height="59dp"
         android:ems="10"
         android:inputType="text"
-        android:text="Name"
+        android:hint="Ingrese la pregunta"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -20,28 +20,96 @@
         app:layout_constraintVertical_bias="0.126" />
 
     <EditText
-        android:id="@+id/editTextText5"
+        android:id="@+id/editTextRespuesta1"
         android:layout_width="257dp"
         android:layout_height="51dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="44dp"
         android:ems="10"
         android:inputType="text"
-        android:text="Name"
+        android:hint="Respuesta 1"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.523"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextText3" />
+        app:layout_constraintTop_toBottomOf="@+id/laPregunta" />
 
     <EditText
-        android:id="@+id/editTextText6"
+        android:id="@+id/editTextRespuesta2"
         android:layout_width="257dp"
         android:layout_height="51dp"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="16dp"
         android:ems="10"
         android:inputType="text"
-        android:text="Name"
+        android:hint="Respuesta 2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextText5" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextRespuesta1" />
+
+    <EditText
+        android:id="@+id/editTextRespuesta3"
+        android:layout_width="257dp"
+        android:layout_height="51dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:inputType="text"
+        android:hint="Respuesta 3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextRespuesta2" />
+
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="378dp"
+        android:layout_height="167dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="4dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextRespuesta3"
+        app:layout_constraintVertical_bias="0.0">
+
+        <RadioButton
+            android:id="@+id/radioButtonRespuesta1"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_gravity="center_vertical"
+            android:text="Correcta" />
+
+        <RadioButton
+            android:id="@+id/radioButtonRespuesta2"
+            android:layout_width="match_parent"
+            android:layout_height="58dp"
+            android:layout_gravity="center_vertical"
+            android:text="Correcta" />
+
+        <RadioButton
+            android:id="@+id/radioButtonRespuesta3"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_gravity="center_vertical"
+            android:text="Correcta" />
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="190dp"
+        android:layout_height="59dp"
+        android:layout_marginTop="20dp"
+        android:onClick="OnClickPregunta"
+        android:text="Guardar Pregunta"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="OnClickVolver"
+        android:text="Volver"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
