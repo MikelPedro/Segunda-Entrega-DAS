@@ -43,10 +43,10 @@ public class MainActivity extends AppCompatActivity {
         //finish(); si le das al triangulo no puedes volver atras
     }
 
-    public void OnClickCrearP(View v){
-        Intent intent = new Intent(this, CrearPregunta.class);
-        this.startActivity(intent);
-        finish();
+    public void OnClickJugar(View v){
+        Intent intentJugar = new Intent(this, JugarActivity.class);
+        this.startActivity(intentJugar);
+        //finsih();
     }
 
 }

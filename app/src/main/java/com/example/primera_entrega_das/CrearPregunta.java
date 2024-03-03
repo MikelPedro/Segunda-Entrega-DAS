@@ -74,10 +74,26 @@ public class CrearPregunta extends AppCompatActivity {
         long id = bd.insertarPregunta(pregunta,tema,respuesta1,respuesta2,respuesta3,respuestaCorrecta);
         Log.d("id en la BD",String.valueOf(id));
 
+        // Limpiar y restaurar los valores por defecto de los EditText
+        editTextPregunta.setText("");
+        editTextRespuesta1.setText("");
+        editTextRespuesta1.setHint("Respuesta 1");
+
+        editTextRespuesta2.setText("");
+        editTextRespuesta2.setHint("Respuesta 2");
+
+        editTextRespuesta3.setText("");
+        editTextRespuesta3.setHint("Respuesta 3");
+
+        // Limpiar selección de los RadioButtons
+        radioButtonRespuesta1.setChecked(false);
+        radioButtonRespuesta2.setChecked(false);
+        radioButtonRespuesta3.setChecked(false);
 
         //Mostrar dialogo
         DialogFragment dialogo = new DialogoCP();
         dialogo.show(getSupportFragmentManager(), "etiqueta");
+
     }
 
     public void OnClickVolver(View v){

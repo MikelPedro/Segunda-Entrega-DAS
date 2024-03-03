@@ -27,15 +27,20 @@ public class IntermedioJugarCrear extends AppCompatActivity {
 
     public void OnClickJugar(View v){
         // aparece la pantalla de Jugar (fragment)
+        Intent intentJugar = new Intent(this, JugarActivity.class);
+        // Inicia la actividad
+        intentJugar.putExtra("TemaJugar",tema);
+        this.startActivity(intentJugar);
+        finish();
 
     }
 
     public void OnClickCrearPreg(View v){
 
-        Intent intent = new Intent(this, CrearPregunta.class);
+        Intent intentCP = new Intent(this, CrearPregunta.class);
         // Inicia la actividad
-        intent.putExtra("TemaCP",tema);
-        this.startActivity(intent);
+        intentCP.putExtra("TemaCP",tema);
+        this.startActivity(intentCP);
         finish();
     }
 }
