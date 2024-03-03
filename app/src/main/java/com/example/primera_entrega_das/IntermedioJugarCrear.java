@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.TextView;
 
 public class IntermedioJugarCrear extends AppCompatActivity {
-
+    private String tema;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -16,7 +16,7 @@ public class IntermedioJugarCrear extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            String tema = extras.getString("Tema");
+           tema = extras.getString("Tema");
 
 
             TextView temaTextView = findViewById(R.id.textViewTemaInter);
@@ -34,6 +34,7 @@ public class IntermedioJugarCrear extends AppCompatActivity {
 
         Intent intent = new Intent(this, CrearPregunta.class);
         // Inicia la actividad
+        intent.putExtra("TemaCP",tema);
         this.startActivity(intent);
         finish();
     }
