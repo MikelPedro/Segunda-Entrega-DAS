@@ -2,9 +2,9 @@ package com.example.primera_entrega_das;
 
 public class ModeloTemas {
 
-    private int imagenId;
-    private String titulo;
-    private String descripcion;
+    private final int imagenId;
+    private final String titulo;
+    private final String descripcion;
 
     public ModeloTemas(String titulo, String descripcion, int imagenId) {
         this.titulo = titulo;

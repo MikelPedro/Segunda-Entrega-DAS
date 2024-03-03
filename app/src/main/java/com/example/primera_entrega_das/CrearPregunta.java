@@ -5,6 +5,7 @@ import androidx.fragment.app.DialogFragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -69,9 +70,9 @@ public class CrearPregunta extends AppCompatActivity {
 
         //Guardar en la BD:
         //llamada a la clase que contiene el metodo en la BD
-        OperacionesBD bd = new OperacionesBD(getApplicationContext(),1);
+        OperacionesBD bd = new OperacionesBD(this,1);
         long id = bd.insertarPregunta(pregunta,tema,respuesta1,respuesta2,respuesta3,respuestaCorrecta);
-        System.out.println(String.valueOf(id));
+        Log.d("id en la BD",String.valueOf(id));
 
 
         //Mostrar dialogo

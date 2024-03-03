@@ -18,7 +18,7 @@ public class BD extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         // Creacion de la tabla
         db.execSQL("CREATE TABLE CUESTIONARIO" +  "( id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "Pregunta TEXT PRIMARY KEY, " +
+                "Pregunta TEXT NOT NULL, " +
                 "Tema TEXT NOT NULL," +
                 " Respuesta1 TEXT NOT NULL," +
                 " Respuesta2 TEXT NOT NULL,  " +
