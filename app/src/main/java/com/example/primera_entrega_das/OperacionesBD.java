@@ -76,11 +76,11 @@ public class OperacionesBD extends BD{
 
         SQLiteDatabase db = getReadableDatabase();
 
-        String[] losTemas = new String[1];
-        losTemas[0] = tema;
+        String[] elTema = new String[1];
+        elTema[0] = tema;
 
         //Consulta a realizar en base al tema que se ha seleccionado en la app
-        Cursor cu = db.rawQuery("SELECT * FROM Cuestionario WHERE Tema=?", losTemas);
+        Cursor cu = db.rawQuery("SELECT * FROM Cuestionario WHERE Tema=?", elTema);
 
         //obtener los datos de la consulta
         while (cu.moveToNext()){
