@@ -16,12 +16,16 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 
 public class JugarActivity extends AppCompatActivity {
 
     protected ArrayList<ModeloPregunta> listaPreguntasTemas;
+    private final int preguntasMostradas = 0;
+    private final int respuestasCorrectas = 0;
+    private HashMap<Integer, Boolean> preguntasYaMostradas = new HashMap<>(); //hashmap para controlar las preguntas que ya han salido
 
     //Parte necesaria para fragments
     public static class HorizontalFragment extends Fragment {
@@ -59,14 +63,9 @@ public class JugarActivity extends AppCompatActivity {
         }
 
         //Log.d("PREGUNTA SOBRE TEMA",listaPreguntasTemas.get(iAleatorio).getPregunta());
-        //Log.d("PREGUNTA SOBRE TEMA",listaPreguntasTemas.get(iAleatorio).getRespuesta1());
-        //Log.d("PREGUNTA SOBRE TEMA",listaPreguntasTemas.get(iAleatorio).getRespuesta2());
-        //Log.d("PREGUNTA SOBRE TEMA",listaPreguntasTemas.get(iAleatorio).getRespuesta3());
         //Log.d("PREGUNTA SOBRE TEMA",listaPreguntasTemas.get(iAleatorio).getRespuestaCorrecta());
         //Log.d("PREGUNTA SOBRE TEMA", String.valueOf(listaPreguntasTemas.size()));
-        //Funciona
-        // Habria que recorrer todas las preguntas, seleccionar una de manera aleatoria y mirar
-        //la correcta
+
         //Guardar Pregunta en un fichero ?
 
     }
@@ -120,9 +119,21 @@ public class JugarActivity extends AppCompatActivity {
 
         Random random = new Random();
         int iAleatorio = random.nextInt(listaPreguntas.size());
+        boolean enc = false;
 
-        // Devolver la pregunta correspondiente al índice aleatorio
-        return listaPreguntas.get(iAleatorio);
+        while (!enc) {
+            iAleatorio = random.nextInt(listaPreguntas.size());
+
+            if (!preguntasYaMostradas.containsKey(iAleatorio) || !preguntasYaMostradas.get(iAleatorio)) {
+                preguntasYaMostradas.put(iAleatorio, true);
+                enc = true;
+                // Devolver la pregunta correspondiente al índice aleatorio
+                return listaPreguntas.get(iAleatorio);
+            }
+        }
+
+        return null; //poner aviso o dialogo o algo de que no hay suficientes preguntas.
+
     }
 
 
