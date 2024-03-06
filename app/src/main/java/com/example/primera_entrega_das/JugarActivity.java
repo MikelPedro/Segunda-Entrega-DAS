@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,10 +23,10 @@ import java.util.Random;
 
 public class JugarActivity extends AppCompatActivity {
 
-    protected ArrayList<ModeloPregunta> listaPreguntasTemas;
+    protected ArrayList<ModeloPregunta> listaPreguntasTemas, listaPreguntasTodas;
     private final int preguntasMostradas = 0;
     private final int respuestasCorrectas = 0;
-    private HashMap<Integer, Boolean> preguntasYaMostradas = new HashMap<>(); //hashmap para controlar las preguntas que ya han salido
+    private int contadorPreguntasMostradas = 0;
 
     //Parte necesaria para fragments
     public static class HorizontalFragment extends Fragment {
@@ -65,13 +66,8 @@ public class JugarActivity extends AppCompatActivity {
         //Log.d("PREGUNTA SOBRE TEMA",listaPreguntasTemas.get(iAleatorio).getPregunta());
         //Log.d("PREGUNTA SOBRE TEMA",listaPreguntasTemas.get(iAleatorio).getRespuestaCorrecta());
         //Log.d("PREGUNTA SOBRE TEMA", String.valueOf(listaPreguntasTemas.size()));
-
         //Guardar Pregunta en un fichero ?
-
     }
-
-
-
 
     @Override
     protected void onStart() {
@@ -87,13 +83,11 @@ public class JugarActivity extends AppCompatActivity {
             TextView textViewPregunta = frag.findViewById(R.id.textViewPreguntaJugar);
             Button btnSigPregunta = frag.findViewById(R.id.botonSigPreg);
 
+
+            OperacionesBD bd = new OperacionesBD(this, 1);
             if (extras != null) {
                 String tema = extras.getString("TemaJugar");
-
-
-                OperacionesBD bd = new OperacionesBD(this, 1);
                 listaPreguntasTemas = bd.obtenerPreguntaTema(tema);
-
                 ModeloPregunta mPregunta = this.obtenerPreguntaLista(listaPreguntasTemas);
                 //puedes dar estilos, buscar botones, textviews etc
                 //bajar aqui lo de buscar para meter el texto en la checkbox
@@ -103,15 +97,51 @@ public class JugarActivity extends AppCompatActivity {
                 radioButtonR2.setText(mPregunta.getRespuesta2());
                 radioButtonR3.setText(mPregunta.getRespuesta3());
 
-            }
+            }else{ //preguntas aleatorias
 
+                listaPreguntasTodas = bd.obtenerPreguntaRandom();
+                ModeloPregunta mPregunta = this.obtenerPreguntaLista(listaPreguntasTodas);
+
+                textViewPregunta.setText(mPregunta.getPregunta());
+                radioButtonR1.setText(mPregunta.getRespuesta1());
+                radioButtonR2.setText(mPregunta.getRespuesta2());
+                radioButtonR3.setText(mPregunta.getRespuesta3());
+            }
             //me falta que saque preguntas aleatorias de todos los temas
             // y la verificacion de la pregunta y la noti
+            //hacer inserciones en la bd desde un fichero de texto
+            //preferencias con tema e idioma
+            btnSigPregunta.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (contadorPreguntasMostradas < 3) {
+                        // Mostrar nueva pregunta
+                        ModeloPregunta mPregunta = obtenerPreguntaLista(listaPreguntasTemas);
+
+                        // Resto de tu código para mostrar la pregunta en los radio buttons, etc.
+
+                        // Incrementar el contador
+                        contadorPreguntasMostradas++;
+                    } else {
+                        // Ya se mostraron 3 preguntas, puedes mostrar un mensaje o realizar otra acción
+                        Toast.makeText(JugarActivity.this, "Ya se mostraron 3 preguntas", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
         }
 
+    }
 
-
-
+    // cargar pregunta da igual que sea aleatoria o de tema
+    private String cargarNuevaPregunta(ArrayList<ModeloPregunta> listaPreguntas, TextView tV1, RadioButton rB1, RadioButton rB2, RadioButton rB3) {
+        ModeloPregunta mPregunta = this.obtenerPreguntaLista(listaPreguntas);
+        // Resto del código para configurar los elementos de la interfaz
+        tV1.setText(mPregunta.getPregunta());
+        rB1.setText(mPregunta.getRespuesta1());
+        rB2.setText(mPregunta.getRespuesta2());
+        rB3.setText(mPregunta.getRespuesta3());
+        String respuesta = mPregunta.getRespuestaCorrecta();
+        return respuesta;
     }
 
     //clase para obtener una pregunta aleatoria dada una lista cualquiera, ya sea en base a un tema o no.
@@ -121,20 +151,24 @@ public class JugarActivity extends AppCompatActivity {
         int iAleatorio = random.nextInt(listaPreguntas.size());
         boolean enc = false;
 
-        while (!enc) {
-            iAleatorio = random.nextInt(listaPreguntas.size());
+        iAleatorio = random.nextInt(listaPreguntas.size());
 
-            if (!preguntasYaMostradas.containsKey(iAleatorio) || !preguntasYaMostradas.get(iAleatorio)) {
-                preguntasYaMostradas.put(iAleatorio, true);
-                enc = true;
-                // Devolver la pregunta correspondiente al índice aleatorio
-                return listaPreguntas.get(iAleatorio);
-            }
-        }
-
-        return null; //poner aviso o dialogo o algo de que no hay suficientes preguntas.
-
+        // Devolver la pregunta correspondiente al índice aleatorio
+        // (puede repetirse una pregunta en caso de que haya pocas preguntas en la BD)
+        return listaPreguntas.get(iAleatorio);
     }
 
 
+
+    // Método para obtener la respuesta seleccionada de los RadioButtons (gpt)
+    private String obtenerRespuestaSeleccionada(RadioButton radioButtonR1, RadioButton radioButtonR2, RadioButton radioButtonR3) {
+        if (radioButtonR1.isChecked()) {
+            return radioButtonR1.getText().toString();
+        } else if (radioButtonR2.isChecked()) {
+            return radioButtonR2.getText().toString();
+        } else if (radioButtonR3.isChecked()) {
+            return radioButtonR3.getText().toString();
+        }
+        return "";
+    }
 }
