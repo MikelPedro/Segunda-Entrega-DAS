@@ -39,6 +39,13 @@ public class MainActivity extends AppCompatActivity {
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
+
+        //TODO: Pantalla horizontal en fin juego activity
+        // Fragment (no perder info)
+        // Idiomas
+        // Estilo (preferencia)
+        // intent implicito
+        // docu
     }
 
 
