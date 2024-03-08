@@ -145,17 +145,15 @@ public class JugarActivity extends AppCompatActivity {
                             primeraPreguntaMostrada = true;
                         } else {
                             // Si no es la primera pregunta, carga una nueva pregunta y procede como antes
-                            String respReal;
+                            String respUsu = obtenerRespuestaSeleccionada(radioButtonR1, radioButtonR2, radioButtonR3);
+                            if (respReal.equals(respUsu)) {
+                                contPreguntasAcierto++;
+                            }
+
                             if (extras != null) {
                                 respReal = cargarNuevaPregunta(listaPreguntasTemas, textViewPregunta, radioButtonR1, radioButtonR2, radioButtonR3);
                             } else {
                                 respReal = cargarNuevaPregunta(listaPreguntasTodas, textViewPregunta, radioButtonR1, radioButtonR2, radioButtonR3);
-                            }
-
-                            String respUsu = obtenerRespuestaSeleccionada(radioButtonR1, radioButtonR2, radioButtonR3);
-
-                            if (respReal.equals(respUsu)) {
-                                contPreguntasAcierto++;
                             }
 
                             // Incrementar el contador
