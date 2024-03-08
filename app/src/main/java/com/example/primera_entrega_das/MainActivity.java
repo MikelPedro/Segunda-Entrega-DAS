@@ -5,6 +5,7 @@ package com.example.primera_entrega_das;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
@@ -21,6 +22,13 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.labarra);
         setSupportActionBar(toolbar);
+
+        OperacionesBD bd = new OperacionesBD(this, 1);
+        SQLiteDatabase db = bd.getWritableDatabase();
+
+        // Llamada al método cargarPreguntasEnBD para cargar preguntas en la BD
+        bd.cargarPreguntasEnBD(db, this);
+
     }
 
 

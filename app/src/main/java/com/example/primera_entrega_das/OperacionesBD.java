@@ -3,12 +3,17 @@ package com.example.primera_entrega_das;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import android.view.Display;
 
 import androidx.annotation.Nullable;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 public class OperacionesBD extends BD{
@@ -101,5 +106,34 @@ public class OperacionesBD extends BD{
         db.close();
 
         return listaPreguntasTema;
+    }
+
+    public void cargarPreguntasEnBD(SQLiteDatabase db,Context context) {
+        // Leer y ejecutar las sentencias INSERT desde el archivo
+        try {
+            if (context != null) {
+                InputStream inputStream = context.getResources().openRawResource(R.raw.preguntas);
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+
+                String line;
+                while ((line = bufferedReader.readLine()) != null) {
+                    // Ejecutar cada sentencia INSERT
+                    db.execSQL(line);
+                    Log.d("BD", "Sentencia SQL: " + line);
+                }
+
+                bufferedReader.close();
+                inputStream.close();
+            } else {
+                // Handle the case where context is null
+                Log.e("BD", "Context es nulo");
+            }
+        } catch (SQLException e) {
+            Log.e("BD", "Error al ejecutar sentencia SQL: " + e.getMessage());
+            e.printStackTrace();
+        } catch (IOException e) {
+            Log.e("BD", "Error de entrada/salida: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 }
