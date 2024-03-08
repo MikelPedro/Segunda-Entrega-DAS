@@ -171,8 +171,8 @@ public class JugarActivity extends AppCompatActivity {
 
                         Intent intent = new Intent(v.getContext(),FinJuegoActivity.class);
                         //Añadir al intent informacion como el nombre de la opcion seleccionada
-                        intent.putExtra("pregCorrecta", contPreguntasAcierto);
-                        intent.putExtra("pregRespondidas", contPreguntasMostradas);
+                        intent.putExtra("pregCorrecta", String.valueOf(contPreguntasAcierto));
+                        intent.putExtra("pregRespondidas", String.valueOf(contPreguntasMostradas));
                         // Inicia la actividad
                         v.getContext().startActivity(intent);
                         finish(); //finaliza esta actividad
