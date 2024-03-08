@@ -3,6 +3,7 @@ package com.example.primera_entrega_das;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
 import android.content.res.Configuration;
@@ -14,19 +15,21 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Random;
 
 
 public class JugarActivity extends AppCompatActivity {
 
     protected ArrayList<ModeloPregunta> listaPreguntasTemas, listaPreguntasTodas;
-    private final int preguntasMostradas = 0;
-    private final int respuestasCorrectas = 0;
-    private int contadorPreguntasMostradas = 0;
+    private static final String KEY_CONTADOR = "contPreguntasMostradas"; //chatgpt
+    private static final String KEY_CONT_ACIERTO = "contPreguntasAcierto";
+
+    private boolean primeraPreguntaMostrada = false;
+
+    private int contPreguntasAcierto = 0;
+    private int contPreguntasMostradas = 0;
+    private String respReal;
 
     //Parte necesaria para fragments
     public static class HorizontalFragment extends Fragment {
@@ -50,6 +53,7 @@ public class JugarActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         super.setContentView(R.layout.activity_jugar);
 
+
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             // Cargar el Fragmento en modo horizontal
             getSupportFragmentManager().beginTransaction()
@@ -70,6 +74,21 @@ public class JugarActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(KEY_CONTADOR, contPreguntasMostradas);
+        outState.putInt(KEY_CONT_ACIERTO, contPreguntasAcierto);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        contPreguntasMostradas = savedInstanceState.getInt(KEY_CONTADOR, 0);
+        contPreguntasAcierto = savedInstanceState.getInt(KEY_CONT_ACIERTO, 0);
+    }
+
+
+    @Override
     protected void onStart() {
         super.onStart();
 
@@ -83,51 +102,80 @@ public class JugarActivity extends AppCompatActivity {
             TextView textViewPregunta = frag.findViewById(R.id.textViewPreguntaJugar);
             Button btnSigPregunta = frag.findViewById(R.id.botonSigPreg);
 
-
             OperacionesBD bd = new OperacionesBD(this, 1);
             if (extras != null) {
                 String tema = extras.getString("TemaJugar");
                 listaPreguntasTemas = bd.obtenerPreguntaTema(tema);
-                ModeloPregunta mPregunta = this.obtenerPreguntaLista(listaPreguntasTemas);
-                //puedes dar estilos, buscar botones, textviews etc
-                //bajar aqui lo de buscar para meter el texto en la checkbox
-
-                textViewPregunta.setText(mPregunta.getPregunta());
-                radioButtonR1.setText(mPregunta.getRespuesta1());
-                radioButtonR2.setText(mPregunta.getRespuesta2());
-                radioButtonR3.setText(mPregunta.getRespuesta3());
-
+                respReal = cargarNuevaPregunta(listaPreguntasTemas,textViewPregunta,radioButtonR1,radioButtonR2,radioButtonR3);
             }else{ //preguntas aleatorias
 
                 listaPreguntasTodas = bd.obtenerPreguntaRandom();
-                ModeloPregunta mPregunta = this.obtenerPreguntaLista(listaPreguntasTodas);
-
-                textViewPregunta.setText(mPregunta.getPregunta());
-                radioButtonR1.setText(mPregunta.getRespuesta1());
-                radioButtonR2.setText(mPregunta.getRespuesta2());
-                radioButtonR3.setText(mPregunta.getRespuesta3());
+                respReal = cargarNuevaPregunta(listaPreguntasTodas,textViewPregunta,radioButtonR1,radioButtonR2,radioButtonR3);
             }
-            //me falta que saque preguntas aleatorias de todos los temas
+
+            primeraPreguntaMostrada = false;
+
             // y la verificacion de la pregunta y la noti
             //hacer inserciones en la bd desde un fichero de texto
             //preferencias con tema e idioma
             btnSigPregunta.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (contadorPreguntasMostradas < 3) {
-                        // Mostrar nueva pregunta
-                        ModeloPregunta mPregunta = obtenerPreguntaLista(listaPreguntasTemas);
+                    if (contPreguntasMostradas < 3) {
+                        if (!primeraPreguntaMostrada) {
+                            // Si es la primera pregunta, verifica la respuesta sin cargar una nueva pregunta
 
-                        // Resto de tu código para mostrar la pregunta en los radio buttons, etc.
+                            String respUsu = obtenerRespuestaSeleccionada(radioButtonR1, radioButtonR2, radioButtonR3);
 
-                        // Incrementar el contador
-                        contadorPreguntasMostradas++;
-                    } else {
-                        // Ya se mostraron 3 preguntas, puedes mostrar un mensaje o realizar otra acción
-                        Toast.makeText(JugarActivity.this, "Ya se mostraron 3 preguntas", Toast.LENGTH_SHORT).show();
+                            if (respReal.equals(respUsu)) {
+                                contPreguntasAcierto++;
+                            }
+
+                            //cargar la siguiente pregunta
+                            if (extras != null) {
+                                respReal = cargarNuevaPregunta(listaPreguntasTemas, textViewPregunta, radioButtonR1, radioButtonR2, radioButtonR3);
+                            } else {
+                                respReal = cargarNuevaPregunta(listaPreguntasTodas, textViewPregunta, radioButtonR1, radioButtonR2, radioButtonR3);
+                            }
+
+                            contPreguntasMostradas++;
+                            Log.d(" primera pregunta 1", String.valueOf(contPreguntasMostradas));
+                            Log.d("primera pregunta acertadas", String.valueOf(contPreguntasAcierto));
+                            // Marcar que la primera pregunta ya se mostró
+                            primeraPreguntaMostrada = true;
+                        } else {
+                            // Si no es la primera pregunta, carga una nueva pregunta y procede como antes
+                            String respReal;
+                            if (extras != null) {
+                                respReal = cargarNuevaPregunta(listaPreguntasTemas, textViewPregunta, radioButtonR1, radioButtonR2, radioButtonR3);
+                            } else {
+                                respReal = cargarNuevaPregunta(listaPreguntasTodas, textViewPregunta, radioButtonR1, radioButtonR2, radioButtonR3);
+                            }
+
+                            String respUsu = obtenerRespuestaSeleccionada(radioButtonR1, radioButtonR2, radioButtonR3);
+
+                            if (respReal.equals(respUsu)) {
+                                contPreguntasAcierto++;
+                            }
+
+                            // Incrementar el contador
+                            contPreguntasMostradas++;
+                        }
+
+                        if (contPreguntasMostradas == 3) {
+                            // Ya se mostraron 3 preguntas, puedes mostrar un mensaje o realizar otra acción
+                            DialogFragment dialogo = new DialogoCP();
+                            dialogo.show(getSupportFragmentManager(), "etiqueta");
+
+                        }
+
+                        Log.d("CONTADOR PREGUNTAS MOSTRADAS", String.valueOf(contPreguntasMostradas));
+                        Log.d("CONTADOR PREGUNTAS acertadas", String.valueOf(contPreguntasAcierto));
+
                     }
                 }
             });
+
         }
 
     }
@@ -140,8 +188,7 @@ public class JugarActivity extends AppCompatActivity {
         rB1.setText(mPregunta.getRespuesta1());
         rB2.setText(mPregunta.getRespuesta2());
         rB3.setText(mPregunta.getRespuesta3());
-        String respuesta = mPregunta.getRespuestaCorrecta();
-        return respuesta;
+        return mPregunta.getRespuestaCorrecta();
     }
 
     //clase para obtener una pregunta aleatoria dada una lista cualquiera, ya sea en base a un tema o no.
@@ -149,7 +196,6 @@ public class JugarActivity extends AppCompatActivity {
 
         Random random = new Random();
         int iAleatorio = random.nextInt(listaPreguntas.size());
-        boolean enc = false;
 
         iAleatorio = random.nextInt(listaPreguntas.size());
 
