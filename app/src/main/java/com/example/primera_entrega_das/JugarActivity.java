@@ -3,9 +3,9 @@ package com.example.primera_entrega_das;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
@@ -162,21 +162,28 @@ public class JugarActivity extends AppCompatActivity {
                             contPreguntasMostradas++;
                         }
 
-                        if (contPreguntasMostradas == 3) {
-                            // Ya se mostraron 3 preguntas, puedes mostrar un mensaje o realizar otra acción
-                            DialogFragment dialogo = new DialogoCP();
-                            dialogo.show(getSupportFragmentManager(), "etiqueta");
-
-                        }
 
                         Log.d("CONTADOR PREGUNTAS MOSTRADAS", String.valueOf(contPreguntasMostradas));
                         Log.d("CONTADOR PREGUNTAS acertadas", String.valueOf(contPreguntasAcierto));
 
                     }
+                    if (contPreguntasMostradas == 3) {
+
+                        Intent intent = new Intent(v.getContext(),FinJuegoActivity.class);
+                        //Añadir al intent informacion como el nombre de la opcion seleccionada
+                        intent.putExtra("pregCorrecta", contPreguntasAcierto);
+                        intent.putExtra("pregRespondidas", contPreguntasMostradas);
+                        // Inicia la actividad
+                        v.getContext().startActivity(intent);
+                        finish(); //finaliza esta actividad
+
+                    }
                 }
             });
 
+
         }
+
 
     }
 
