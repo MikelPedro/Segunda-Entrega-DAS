@@ -31,14 +31,6 @@ public class MainActivity extends AppCompatActivity {
         // Llamada al método cargarPreguntasEnBD para cargar preguntas en la BD
         bd.cargarPreguntasEnBD(db, this);
 
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
 
         //TODO: Pantalla horizontal en fin juego activity
         // Fragment (no perder info)
@@ -74,4 +66,16 @@ public class MainActivity extends AppCompatActivity {
         //finsih();
     }
 
+    public void OnClickIconoPregunta(View v){
+
+        //dialogo e intent implicito a wikipedia
+    }
+
+    public void OnClickIdiomas(View v){
+
+    }
+
+    public void OnClickPreferencias(View v){
+
+    }
 }

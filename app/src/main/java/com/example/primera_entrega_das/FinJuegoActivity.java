@@ -49,7 +49,7 @@ public class FinJuegoActivity extends AppCompatActivity {
     }
 
 
-    private void createNotificationChannel() {
+    public void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
             requestPermissions(new String[] {android.Manifest.permission.POST_NOTIFICATIONS}, 1);
@@ -62,6 +62,15 @@ public class FinJuegoActivity extends AppCompatActivity {
     }
 
     private void lanzarNotificacion() {
+
+        //Crear inten para abrir app de mensajes
+        Intent intentMensaje = new Intent(Intent.ACTION_SEND);
+        intentMensaje.setType("text/plain");
+        intentMensaje.putExtra(Intent.EXTRA_TEXT, "¡Comparte tu resultado aquí!");
+
+        // Crear un PendingIntent para el intent de la aplicación de mensajes
+        PendingIntent pendingIntentMensaje = PendingIntent.getActivity(this, 0, intentMensaje, PendingIntent.FLAG_IMMUTABLE);
+
         // Crear un Intent para abrir MainActivity
         Intent intent = new Intent(this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Esto asegura que MainActivity se inicie como una nueva tarea
@@ -75,7 +84,9 @@ public class FinJuegoActivity extends AppCompatActivity {
                 .setContentText("Vuelve a la pantalla principal y sigue aprendiendo")
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setContentIntent(pendingIntent)
-                .addAction(R.drawable.imagen_jugar, "VALE", pendingIntent);
+                .addAction(R.drawable.imagen_jugar, "VALE", pendingIntent)
+                .addAction(android.R.drawable.ic_menu_share, "Compartir", pendingIntentMensaje);  // Acción para compartir
+
 
         NotificationManagerCompat notificacionman = NotificationManagerCompat.from(this);
 
