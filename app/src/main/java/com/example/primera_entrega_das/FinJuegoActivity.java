@@ -22,6 +22,9 @@ public class FinJuegoActivity extends AppCompatActivity {
     private final String CHANNEL_ID = "channelID"; // Un identificador único para la notificación
     private final String channelName = "channelName";
     private final int notificacion_id = 0;
+    private String contPA = "";
+    private  String contPM = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,8 +36,8 @@ public class FinJuegoActivity extends AppCompatActivity {
         TextView tvFinal = findViewById(R.id.tVFinJuego);
         Bundle extras = getIntent().getExtras();
         if(extras!= null){
-            String contPA = extras.getString("pregCorrecta");
-            String contPM =  extras.getString("pregRespondidas");
+            contPA = extras.getString("pregCorrecta");
+            contPM =  extras.getString("pregRespondidas");
             //Mostrar mensaje con el numero de preguntas mostradas y acertadas
             tvFinal.setText(String.format("Resultado del Juego:\nNumero de preguntas respondidas:%s\nNumero de respuestas correctas:%s", contPM, contPA));
         }else{
@@ -63,10 +66,11 @@ public class FinJuegoActivity extends AppCompatActivity {
 
     private void lanzarNotificacion() {
 
-        //Crear inten para abrir app de mensajes
+        //Crear inten para abrir compartir en la app que quieras
         Intent intentMensaje = new Intent(Intent.ACTION_SEND);
         intentMensaje.setType("text/plain");
-        intentMensaje.putExtra(Intent.EXTRA_TEXT, "¡Comparte tu resultado aquí!");
+        intentMensaje.putExtra(Intent.EXTRA_TEXT, "Mira mi resultado en la app Preguntas:\n" +
+                String.format("Resultado del Juego:\nNumero de preguntas respondidas:%s\nNumero de respuestas correctas:%s", contPM, contPA));
 
         // Crear un PendingIntent para el intent de la aplicación de mensajes
         PendingIntent pendingIntentMensaje = PendingIntent.getActivity(this, 0, intentMensaje, PendingIntent.FLAG_IMMUTABLE);
