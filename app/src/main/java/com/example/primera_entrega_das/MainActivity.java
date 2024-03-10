@@ -75,11 +75,8 @@ public class MainActivity extends AppCompatActivity {
         dialogo.show(getSupportFragmentManager(), "dialogoIcono");
     }
 
-    public void OnClickIdiomas(MenuItem item){
-
-    }
-
-    public void OnClickPreferencias(MenuItem item){
-
+    public void OnClickConfig(MenuItem item){
+        Intent intent = new Intent(this, Configuracion.class);
+        startActivity(intent);
     }
 }

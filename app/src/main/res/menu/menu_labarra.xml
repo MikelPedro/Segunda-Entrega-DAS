@@ -4,7 +4,8 @@
 
     <item
         android:id="@+id/idioma"
-        android:title="Idioma" />
+        android:title="Preferencias"
+        android:onClick="OnClickConfig"/>
 
     <item
         android:id="@+id/opcion1"
