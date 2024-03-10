@@ -3,7 +3,7 @@
     <string name="favorito">Favorito</string>
     <string name="nombre_titulo">Titulo</string>
     <string name="nombre_descripcion">Cosas varias que espero que quepa</string>
-
+    <string name="config_activity_title">Preferencias del usuario</string>
     <string-array name="titulos_temas">
         <item>Ingenieria</item>
         <item>Arte</item>
@@ -19,4 +19,26 @@
         <item>Capitales, rios y mas</item>
         <item>Fundamentos, eventos y conocimiento</item>
     </string-array>
+
+    <string-array name="language_entries">
+        <item>Español</item>
+        <item>Inglés</item>
+    </string-array>
+
+    <string-array name="language_values">
+        <item>es</item>
+        <item>en</item>
+    </string-array>
+
+    <string-array name="themes">
+        <item>Claro</item>
+        <item>Oscuro</item>
+    </string-array>
+
+    <string-array name="theme_values">
+        <item>light</item>
+        <item>dark</item>
+    </string-array>
+
+
 </resources>

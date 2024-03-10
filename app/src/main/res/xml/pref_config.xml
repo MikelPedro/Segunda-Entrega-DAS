@@ -1,0 +1,18 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="Estilo">
+
+        <!-- Preferencia para seleccionar el tema -->
+        <ListPreference
+            android:key="theme_preference"
+            android:title="Estilo de la aplicación"
+            android:summary="Seleccione el tema claro u oscuro"
+            android:defaultValue="light"
+            android:entries="@array/themes"
+            android:entryValues="@array/theme_values"
+            />
+
+    </PreferenceCategory>
+
+
+</PreferenceScreen>
