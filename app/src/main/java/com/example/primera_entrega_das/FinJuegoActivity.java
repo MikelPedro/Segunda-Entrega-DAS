@@ -52,6 +52,7 @@ public class FinJuegoActivity extends AppCompatActivity {
     }
 
 
+    //Crear canal de notificaciones
     public void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
@@ -66,13 +67,12 @@ public class FinJuegoActivity extends AppCompatActivity {
 
     private void lanzarNotificacion() {
 
-        //Crear inten para abrir compartir en la app que quieras
+        //Crear inten para abrir compartir el resultado en la app que quieras
         Intent intentMensaje = new Intent(Intent.ACTION_SEND);
         intentMensaje.setType("text/plain");
         intentMensaje.putExtra(Intent.EXTRA_TEXT, "Mira mi resultado en la app Preguntas:\n" +
                 String.format("Resultado del Juego:\nNumero de preguntas respondidas:%s\nNumero de respuestas correctas:%s", contPM, contPA));
 
-        // Crear un PendingIntent para el intent de la aplicación de mensajes
         PendingIntent pendingIntentMensaje = PendingIntent.getActivity(this, 0, intentMensaje, PendingIntent.FLAG_IMMUTABLE);
 
         // Crear un Intent para abrir MainActivity
@@ -81,9 +81,9 @@ public class FinJuegoActivity extends AppCompatActivity {
 
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
 
-        // Crea una notificación
+        // Crea una notificación con 2 opciones
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setSmallIcon(R.drawable.ic_instrucciones)
                 .setContentTitle("Gracias por jugar!")
                 .setContentText("Vuelve a la pantalla principal y sigue aprendiendo")
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
@@ -94,7 +94,7 @@ public class FinJuegoActivity extends AppCompatActivity {
 
         NotificationManagerCompat notificacionman = NotificationManagerCompat.from(this);
 
-        //MIRAR: (darle permisos a la app??)
+        //Verificar permisos en la app para lanzar notificaciones
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions

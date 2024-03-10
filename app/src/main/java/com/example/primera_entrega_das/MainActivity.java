@@ -7,12 +7,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.DialogFragment;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -66,16 +69,17 @@ public class MainActivity extends AppCompatActivity {
         //finsih();
     }
 
-    public void OnClickIconoPregunta(View v){
-
-        //dialogo e intent implicito a wikipedia
+    public void OnClickIconoPregunta(MenuItem item){
+        //Mostrar dialogo
+        DialogFragment dialogo = new DialogoWiki();
+        dialogo.show(getSupportFragmentManager(), "dialogoIcono");
     }
 
-    public void OnClickIdiomas(View v){
+    public void OnClickIdiomas(MenuItem item){
 
     }
 
-    public void OnClickPreferencias(View v){
+    public void OnClickPreferencias(MenuItem item){
 
     }
 }
