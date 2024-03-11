@@ -46,6 +46,7 @@ public class Temas extends AppCompatActivity implements RecyclerViewInterface{
         Intent intent = new Intent(Temas.this,IntermedioJugarCrear.class);
         //pasar el nombre del tema a la otra actividad
         intent.putExtra("Tema",modeloTemas.get(posicion).getTitulo());
+        intent.putExtra("Imagen",modeloTemas.get(posicion).getImagenId());
         startActivity(intent);
         finish();
     }
