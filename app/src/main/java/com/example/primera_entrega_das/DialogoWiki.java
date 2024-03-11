@@ -16,7 +16,7 @@ public class DialogoWiki extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         super.onCreateDialog(savedInstanceState);
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
         builder.setTitle("¿Cómo jugar y añadir preguntas?");
         builder.setMessage("Puedes jugar contestando a las preguntas que vienen por defecto de manera aleatoria " +
                         "o por temas, además puedes crear más preguntas. La información para crear preguntas se puede encontrar" +

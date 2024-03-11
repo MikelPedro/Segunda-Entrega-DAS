@@ -17,7 +17,7 @@ public class DialogoCP extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         super.onCreateDialog(savedInstanceState);
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
         builder.setTitle("Pregunta Guardada");
         builder.setMessage("Se ha guardado correctamente la pregunta en la base de datos. " +
                 "Puedes seguir creando preguntas o volver al menu principal");

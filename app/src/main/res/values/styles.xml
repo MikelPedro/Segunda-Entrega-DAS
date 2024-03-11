@@ -7,8 +7,11 @@
         <item name="colorPrimary">@color/color1</item>
         <item name="colorPrimaryDark">@color/color1Dark</item>
         <item name="colorAccent">@color/colorOtro</item>
+        <!-- Estilo para los botones -->
+        <item name="buttonStyle">@style/AppBoton</item>
+        <!-- Estilo para los textos -->
+        <item name="android:textViewStyle">@style/AppTextView</item>
     </style>
-
     <!-- Dark theme -->
     <style name="AppTheme.Dark" parent="Theme.AppCompat.NoActionBar">
         <!-- Customize your dark theme here. -->
@@ -16,8 +19,39 @@
         <item name="colorPrimary">@color/color1DarkTheme</item>
         <item name="colorPrimaryDark">@color/color1DarkDarkTheme</item>
         <item name="colorAccent">@color/colorOtroDarkTheme</item>
+
     </style>
 
 
+    <style name="AppBoton" parent="Widget.AppCompat.Button">
+        <!-- Fondo del botón -->
+        <item name="android:background">@drawable/fondo_boton</item>
+
+        <!-- Tamaño del texto -->
+        <item name="android:textSize">16sp</item>
+
+        <!-- Color del texto -->
+        <item name="android:textColor">#FAE0E0</item>
+
+        <!-- Alineación del texto en el botón -->
+        <item name="android:gravity">center</item>
+
+        <!-- Efecto de elevación -->
+        <item name="android:elevation">4dp</item>
+    </style>
+
+    <!-- Estilo para los textos de la app -->
+    <style name="AppTextView" parent="Widget.AppCompat.TextView">
+        <!-- Tamaño del texto -->
+        <item name="android:textSize">18sp</item>
+        <!-- Color del texto -->
+        <item name="android:textColor">@android:color/black</item>
+
+    </style>
+
+    <!-- Estilo para los textos de los dialogos -->
+    <style name="AlertDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/color1Dark</item>
+    </style>
 
 </resources>
