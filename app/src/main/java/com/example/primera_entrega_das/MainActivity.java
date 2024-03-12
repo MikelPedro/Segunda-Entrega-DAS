@@ -80,11 +80,12 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         dialogo.show(getSupportFragmentManager(), "dialogoIcono");
     }
 
+    /*
     public void OnClickConfig(MenuItem item){
         Intent intent = new Intent(this, Configuracion.class);
         startActivity(intent);
     }
-
+    */
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, @Nullable String key) {
         if (key.equals("language_preference") || key.equals("theme_preference")) {

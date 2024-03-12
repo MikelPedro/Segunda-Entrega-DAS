@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -35,28 +34,7 @@ public class JugarActivity extends AppCompatActivity {
 
     private JugarViewModel jugarViewModel;
 
-    //Parte necesaria para fragments
-    /*
-    public static class HorizontalFragment extends Fragment {
 
-        public View onCreateView(@NonNull LayoutInflater inflater,
-                                 @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-            View v = inflater.inflate(R.layout.activity_jugar_landscape, container, false);
-            // Realiza tus operaciones habituales
-            return v;
-        }
-    }
-
-    public static class VerticalFragment extends Fragment {
-
-        public View onCreateView(@NonNull LayoutInflater inflater,
-                                 @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-            View v = inflater.inflate(R.layout.activity_jugar_portrait, container, false);
-            // Realiza tus operaciones habituales
-            return v;
-        }
-    }
-    */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,7 +80,7 @@ public class JugarActivity extends AppCompatActivity {
         //Log.d("PREGUNTA SOBRE TEMA", String.valueOf(listaPreguntasTemas.size()));
         //Guardar Pregunta en un fichero ?
     }
-
+    /*
     @Override
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
@@ -115,7 +93,7 @@ public class JugarActivity extends AppCompatActivity {
             setContentView(R.layout.activity_jugar);
         }
     }
-
+    */
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -141,13 +119,7 @@ public class JugarActivity extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         //if (frag != null) {
-        /*
-            radioButtonR1 = findViewById(R.id.radioButtonJugar1);
-            radioButtonR2 = findViewById(R.id.radioButtonJugar2);
-            radioButtonR3 = findViewById(R.id.radioButtonJugar3);
-            textViewPregunta = findViewById(R.id.textViewPreguntaJugar);
-            Button btnSigPregunta = findViewById(R.id.botonSigPreg);
-*/
+
             OperacionesBD bd = new OperacionesBD(this, 1);
             if (extras != null) {
                 String tema = extras.getString("TemaJugar");
