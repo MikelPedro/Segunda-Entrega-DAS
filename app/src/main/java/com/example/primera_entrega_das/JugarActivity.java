@@ -18,11 +18,8 @@ import java.util.Random;
 
 public class JugarActivity extends AppCompatActivity {
 
-    protected ArrayList<ModeloPregunta> listaPreguntasTemas, listaPreguntasTodas;
     private static final String KEY_CONTADOR = "contPreguntasMostradas"; //chatgpt
     private static final String KEY_CONT_ACIERTO = "contPreguntasAcierto";
-
-    private boolean primeraPreguntaMostrada = false;
 
     private int contPreguntasAcierto = 0;
     private int contPreguntasMostradas = 0;
@@ -32,8 +29,6 @@ public class JugarActivity extends AppCompatActivity {
     private TextView textViewPregunta;
 
     private Button btnSigPregunta;
-
-    private JugarViewModel jugarViewModel;
 
     private ModeloPregunta mPregunta;
 
@@ -78,9 +73,7 @@ public class JugarActivity extends AppCompatActivity {
         contPreguntasMostradas = savedInstanceState.getInt(KEY_CONTADOR, 0);
         contPreguntasAcierto = savedInstanceState.getInt(KEY_CONT_ACIERTO, 0);
 
-
     }
-
 
     @Override
     protected void onStart() {
@@ -137,16 +130,6 @@ public class JugarActivity extends AppCompatActivity {
         //}
     }
 
-    // cargar pregunta da igual que sea aleatoria o de tema
-    private String cargarNuevaPregunta(ArrayList<ModeloPregunta> listaPreguntas, TextView tV1, RadioButton rB1, RadioButton rB2, RadioButton rB3) {
-        ModeloPregunta mPregunta = this.obtenerPreguntaLista(listaPreguntas);
-        // Resto del código para configurar los elementos de la interfaz
-        tV1.setText(mPregunta.getPregunta());
-        rB1.setText(mPregunta.getRespuesta1());
-        rB2.setText(mPregunta.getRespuesta2());
-        rB3.setText(mPregunta.getRespuesta3());
-        return mPregunta.getRespuestaCorrecta();
-    }
 
     // Método para cargar una pregunta y actualizar la interfaz
     private String cargarPregunta(ModeloPregunta pregunta) {
@@ -157,25 +140,6 @@ public class JugarActivity extends AppCompatActivity {
         respReal = pregunta.getRespuestaCorrecta();
         return respReal;
     }
-
-    //clase para obtener una pregunta aleatoria dada una lista cualquiera, ya sea en base a un tema o no.
-    public ModeloPregunta obtenerPreguntaLista(ArrayList<ModeloPregunta> listaPreguntas) {
-
-        Random random = new Random();
-        int iAleatorio = random.nextInt(listaPreguntas.size());
-
-        iAleatorio = random.nextInt(listaPreguntas.size());
-
-        // Devolver la pregunta correspondiente al índice aleatorio
-        // (puede repetirse una pregunta en caso de que haya pocas preguntas en la BD)
-
-        ModeloPregunta nuevaPregunta = listaPreguntas.get(iAleatorio);
-
-        jugarViewModel.setPregunta(nuevaPregunta); //guardarla en el ViewModel para gestionar los giros
-        return nuevaPregunta;
-    }
-
-
 
     // Método para obtener la respuesta seleccionada de los RadioButtons (gpt)
     private String obtenerRespuestaSeleccionada(RadioButton radioButtonR1, RadioButton radioButtonR2, RadioButton radioButtonR3) {

@@ -22,8 +22,7 @@
             android:exported="false" />
         <activity
             android:name=".JugarActivity"
-            android:exported="false"
-            android:configChanges="orientation|screenSize"/>
+            android:exported="false" />
         <activity
             android:name=".IntermedioJugarCrear"
             android:exported="false" />
