@@ -28,8 +28,8 @@ public class FinJuegoActivity extends AppCompatActivity {
     private final String CHANNEL_ID = "channelID"; // Un identificador único para la notificación
     private final String channelName = "channelName";
     private final int notificacion_id = 0;
-    private String contPA = "";
-    private  String contPM = "";
+    private int contPA,contPM = 0;
+
 
     //Parte necesaria para fragments
 
@@ -93,10 +93,10 @@ public class FinJuegoActivity extends AppCompatActivity {
             TextView tvFinal = frag.findViewById(R.id.tVFinJuego);
             Bundle extras = getIntent().getExtras();
             if (extras != null) {
-                contPA = extras.getString("pregCorrecta");
-                contPM = extras.getString("pregRespondidas");
+                contPA = extras.getInt("pregCorrecta");
+                contPM = extras.getInt("pregRespondida");
                 //Mostrar mensaje con el numero de preguntas mostradas y acertadas
-                tvFinal.setText(String.format("Resultado del Juego:\nNumero de preguntas respondidas:%s\nNumero de respuestas correctas:%s", contPM, contPA));
+                tvFinal.setText(String.format("Resultado del Juego:\nNumero de preguntas respondidas:%d\nNumero de respuestas correctas:%d", contPM, contPA));
             } else {
                 tvFinal.setText("Gracias por jugar");
             }

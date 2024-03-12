@@ -20,6 +20,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.preference.PreferenceManager;
 
+import java.util.ArrayList;
+
 
 public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -70,8 +72,15 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
     public void OnClickJugar(View v){
         Intent intentJugar = new Intent(this, JugarActivity.class);
+        OperacionesBD opBD = new OperacionesBD(this,1);
+
+        int idP = opBD.obtenerPregRandom("");
+        intentJugar.putExtra("idPregunta",idP);
+        intentJugar.putExtra("TemaJugar",""); // por si acaso puee dar problema
+        intentJugar.putExtra("pregCorrecta",0);
+        intentJugar.putExtra("pregRespondida",0);
         this.startActivity(intentJugar);
-        //finsih();
+        finish();
     }
 
     public void OnClickIconoPregunta(MenuItem item){

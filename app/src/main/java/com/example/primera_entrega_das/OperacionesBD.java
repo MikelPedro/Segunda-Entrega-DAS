@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.ColorSpace;
 import android.util.Log;
 import android.view.Display;
 
@@ -15,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class OperacionesBD extends BD{
 
@@ -72,6 +74,61 @@ public class OperacionesBD extends BD{
         db.close();
 
         return listaPreguntasRandom;
+    }
+
+    private ArrayList<Integer> obtenerIdsRandom(String tema){
+        ArrayList<Integer> listaIdRandom = new ArrayList<Integer>();
+
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cu;
+        if(tema.contentEquals("")) {
+            //Consulta sobre todos los temas
+             cu = db.rawQuery("SELECT id FROM Cuestionario", null);
+        }else{
+            String[] elTema = new String[1];
+            elTema[0] = tema;
+
+             cu = db.rawQuery("SELECT id FROM Cuestionario WHERE Tema=?", elTema);
+        }
+
+        while(cu.moveToNext()){
+            int cod = cu.getInt(0);
+            listaIdRandom.add(cod);
+        }
+
+        return listaIdRandom;
+    }
+
+    public int obtenerPregRandom(String tema){
+
+        ArrayList<Integer> idValido = this.obtenerIdsRandom(tema);
+
+        Random random = new Random();
+
+        return idValido.get(random.nextInt(idValido.size()));
+
+    }
+
+    public ModeloPregunta obtenerPregPorId(int id){
+
+        SQLiteDatabase db = getReadableDatabase();
+
+        String[] elId = new String[1];
+        elId[0] = Integer.toString(id);
+
+        //Consulta a realizar en base al tema que se ha seleccionado en la app
+        Cursor cu = db.rawQuery("SELECT * FROM Cuestionario WHERE id=?", elId);
+
+
+        cu.moveToNext();
+        String preg = cu.getString(1);
+        String r1 = cu.getString(3);
+        String r2 = cu.getString(4);
+        String r3 = cu.getString(5);
+        String correcta = cu.getString(6);
+
+        ModeloPregunta mP = new ModeloPregunta(id,preg,r1,r2,r3,correcta);
+        return mP;
     }
 
     //Metodo para obtener las preguntas relacionadas con el tema que ha escogido el usuario

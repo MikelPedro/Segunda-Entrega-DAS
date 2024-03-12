@@ -37,8 +37,13 @@ public class IntermedioJugarCrear extends AppCompatActivity {
     public void OnClickJugar(View v){
         // aparece la pantalla de Jugar (fragment)
         Intent intentJugar = new Intent(this, JugarActivity.class);
-        // Inicia la actividad
-        intentJugar.putExtra("TemaJugar",tema);
+        OperacionesBD opBD = new OperacionesBD(this,1);
+
+        int idP = opBD.obtenerPregRandom("");
+        intentJugar.putExtra("idPregunta",idP);
+        intentJugar.putExtra("TemaJugar",tema); // por si acaso puee dar problema
+        intentJugar.putExtra("pregCorrecta",0);
+        intentJugar.putExtra("pregRespondida",0);
         this.startActivity(intentJugar);
         finish();
 

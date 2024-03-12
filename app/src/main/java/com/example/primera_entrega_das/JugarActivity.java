@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -34,12 +35,19 @@ public class JugarActivity extends AppCompatActivity {
 
     private JugarViewModel jugarViewModel;
 
+    private ModeloPregunta mPregunta;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         super.setContentView(R.layout.activity_jugar);
-        jugarViewModel = new ViewModelProvider(this).get(JugarViewModel.class); //chatgpt
+
+        //tiene que llamarse igual
+        super.getIntent().putExtra("idPregunta", super.getIntent().getExtras().getInt("idPregunta"));
+        super.getIntent().putExtra("TemaJugar", super.getIntent().getExtras().getString("TemaJugar"));
+        super.getIntent().putExtra("pregCorrecta",super.getIntent().getExtras().getInt("pregCorrecta"));
+        super.getIntent().putExtra("pregRespondida",super.getIntent().getExtras().getInt("pregRespondida"));
+        //jugarViewModel = new ViewModelProvider(this).get(JugarViewModel.class); //chatgpt
 
 
         radioButtonR1 = findViewById(R.id.radioButtonJugar1);
@@ -47,53 +55,16 @@ public class JugarActivity extends AppCompatActivity {
         radioButtonR3 = findViewById(R.id.radioButtonJugar3);
         textViewPregunta = findViewById(R.id.textViewPreguntaJugar);
         btnSigPregunta = findViewById(R.id.botonSigPreg);
-        /*
-        try {
-            ModeloPregunta preguntaAlmacenada = jugarViewModel.getPregunta();
-            if (preguntaAlmacenada != null) {
-                // Restaurar la pregunta almacenada en el ViewModel
-                respReal = cargarPregunta(preguntaAlmacenada);
-                contPreguntasMostradas = savedInstanceState.getInt(KEY_CONTADOR, 0);
-                contPreguntasAcierto = savedInstanceState.getInt(KEY_CONT_ACIERTO, 0);
-            }
-            //No hay pregunta almacenada proseguir
-        } catch (Exception e) {
-            // excepción
-            e.printStackTrace();
-        }
 
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            // Cargar el Fragmento en modo horizontal
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.elFragmento, new HorizontalFragment())
-                    .commit();
-        } else {
+        OperacionesBD bd = new OperacionesBD(this, 1);
 
-            // Cargar el Fragment en modo vertical
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.elFragmento, new VerticalFragment())
-                    .commit();
-        }
-        */
-        //Log.d("PREGUNTA SOBRE TEMA",listaPreguntasTemas.get(iAleatorio).getPregunta());
-        //Log.d("PREGUNTA SOBRE TEMA",listaPreguntasTemas.get(iAleatorio).getRespuestaCorrecta());
-        //Log.d("PREGUNTA SOBRE TEMA", String.valueOf(listaPreguntasTemas.size()));
-        //Guardar Pregunta en un fichero ?
+        mPregunta = bd.obtenerPregPorId(super.getIntent().getExtras().getInt("idPregunta"));
+
+        respReal = cargarPregunta(mPregunta);
+
+
     }
-    /*
-    @Override
-    public void onConfigurationChanged(@NonNull Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
 
-        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            // Cargar recursos específicos de landscape
-            setContentView(R.layout.activity_jugar_landscape);
-        } else {
-            // Cargar recursos específicos de portrait
-            setContentView(R.layout.activity_jugar);
-        }
-    }
-    */
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -115,85 +86,48 @@ public class JugarActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-       // View frag = super.getSupportFragmentManager().findFragmentById(R.id.elFragmento).getView();
-
         Bundle extras = getIntent().getExtras();
-        //if (frag != null) {
+
 
             OperacionesBD bd = new OperacionesBD(this, 1);
-            if (extras != null) {
-                String tema = extras.getString("TemaJugar");
-                listaPreguntasTemas = bd.obtenerPreguntaTema(tema);
-                respReal = cargarNuevaPregunta(listaPreguntasTemas,textViewPregunta,radioButtonR1,radioButtonR2,radioButtonR3);
-            }else{ //preguntas aleatorias
 
-                listaPreguntasTodas = bd.obtenerPreguntaRandom();
-                respReal = cargarNuevaPregunta(listaPreguntasTodas,textViewPregunta,radioButtonR1,radioButtonR2,radioButtonR3);
-            }
+            cargarPregunta(bd.obtenerPregPorId(extras.getInt("idPregunta")));
 
-            primeraPreguntaMostrada = false;
-
-
-            // y la verificacion de la pregunta y la noti
-            //hacer inserciones en la bd desde un fichero de texto
-            //preferencias con tema e idioma
             btnSigPregunta.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
-                    if (contPreguntasMostradas < 3) {
-                        if (!primeraPreguntaMostrada) {
-                            // Si es la primera pregunta, verifica la respuesta sin cargar una nueva pregunta
 
-                            String respUsu = obtenerRespuestaSeleccionada(radioButtonR1, radioButtonR2, radioButtonR3);
+                    // Si es la primera pregunta, verifica la respuesta sin cargar una nueva pregunta
 
-                            if (respReal.equals(respUsu)) {
-                                contPreguntasAcierto++;
-                            }
+                    String respUsu = obtenerRespuestaSeleccionada(radioButtonR1, radioButtonR2, radioButtonR3);
 
-                            //cargar la siguiente pregunta
-                            if (extras != null) {
-                                respReal = cargarNuevaPregunta(listaPreguntasTemas, textViewPregunta, radioButtonR1, radioButtonR2, radioButtonR3);
-                            } else {
-                                respReal = cargarNuevaPregunta(listaPreguntasTodas, textViewPregunta, radioButtonR1, radioButtonR2, radioButtonR3);
-                            }
-
-                            contPreguntasMostradas++;
-                            Log.d(" primera pregunta 1", String.valueOf(contPreguntasMostradas));
-                            Log.d("primera pregunta acertadas", String.valueOf(contPreguntasAcierto));
-                            // Marcar que la primera pregunta ya se mostró
-                            primeraPreguntaMostrada = true;
-                        } else {
-                            // Si no es la primera pregunta, mirar que boton se ha pulsado y cargar la sig pregunta
-                            String respUsu = obtenerRespuestaSeleccionada(radioButtonR1, radioButtonR2, radioButtonR3);
-                            if (respReal.equals(respUsu)) {
-                                contPreguntasAcierto++;
-                            }
-
-                            //cargar la siguiente pregunta
-                            if (extras != null) {
-                                respReal = cargarNuevaPregunta(listaPreguntasTemas, textViewPregunta, radioButtonR1, radioButtonR2, radioButtonR3);
-                            } else {
-                                respReal = cargarNuevaPregunta(listaPreguntasTodas, textViewPregunta, radioButtonR1, radioButtonR2, radioButtonR3);
-                            }
-
-                            contPreguntasMostradas++;
-                        }
-
-
-                        Log.d("CONTADOR PREGUNTAS MOSTRADAS", String.valueOf(contPreguntasMostradas));
-                        Log.d("CONTADOR PREGUNTAS acertadas", String.valueOf(contPreguntasAcierto));
+                    if (respReal.equals(respUsu)) {
+                        JugarActivity.super.getIntent().putExtra("pregCorrecta",JugarActivity.super.getIntent().getExtras().getInt("pregCorrecta")+1);
 
                     }
-                    if (contPreguntasMostradas == 3) {
 
-                        Intent intent = new Intent(v.getContext(),FinJuegoActivity.class);
+                    JugarActivity.super.getIntent().putExtra("pregRespondida",JugarActivity.super.getIntent().getExtras().getInt("pregRespondida")+1);
+
+                    Log.d("PREGUNTAS RESPONDIDAS", String.valueOf(JugarActivity.super.getIntent().getExtras().getInt("pregRespondida")));
+
+                    if (JugarActivity.super.getIntent().getExtras().getInt("pregRespondida") == 3) {
+
+                        Intent intent = new Intent(JugarActivity.this,FinJuegoActivity.class);
                         //Añadir al intent informacion como el nombre de la opcion seleccionada
-                        intent.putExtra("pregCorrecta", String.valueOf(contPreguntasAcierto));
-                        intent.putExtra("pregRespondidas", String.valueOf(contPreguntasMostradas));
+                        intent.putExtra("pregCorrecta", JugarActivity.super.getIntent().getExtras().getInt("pregCorrecta"));
+                        intent.putExtra("pregRespondida", JugarActivity.super.getIntent().getExtras().getInt("pregRespondida"));
                         // Inicia la actividad
-                        v.getContext().startActivity(intent);
+                        JugarActivity.super.startActivity(intent);
                         finish(); //finaliza esta actividad
+                    }else{
+                        Intent intent = new Intent(JugarActivity.this, JugarActivity.class);
+                        intent.putExtra("idPregunta",bd.obtenerPregRandom(JugarActivity.super.getIntent().getExtras().getString("TemaJugar")));
+                        intent.putExtra("TemaJugar",JugarActivity.super.getIntent().getExtras().getString("TemaJugar"));
+                        intent.putExtra("pregCorrecta", JugarActivity.super.getIntent().getExtras().getInt("pregCorrecta"));
+                        intent.putExtra("pregRespondida", JugarActivity.super.getIntent().getExtras().getInt("pregRespondida"));
+                        JugarActivity.super.startActivity(intent);
+                        finish();
                     }
 
                 }
