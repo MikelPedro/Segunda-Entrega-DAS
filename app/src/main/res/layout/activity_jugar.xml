@@ -6,9 +6,53 @@
     android:layout_height="match_parent"
     tools:context=".JugarActivity">
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/elFragmento"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintStart_toStartOf="parent" />
+    <TextView
+        android:id="@+id/textViewPreguntaJugar"
+        android:layout_width="204dp"
+        android:layout_height="82dp"
+        android:layout_marginTop="88dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/botonSigPreg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="72dp"
+        android:text="Siguiente pregunta"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/radioGroup2" />
+
+    <RadioGroup
+        android:id="@+id/radioGroup2"
+        android:layout_width="328dp"
+        android:layout_height="289dp"
+        android:layout_marginTop="60dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewPreguntaJugar">
+
+        <RadioButton
+            android:id="@+id/radioButtonJugar1"
+            android:layout_width="match_parent"
+            android:layout_height="92dp"
+            android:text="RadioButton" />
+
+        <RadioButton
+            android:id="@+id/radioButtonJugar2"
+            android:layout_width="match_parent"
+            android:layout_height="98dp"
+            android:text="RadioButton" />
+
+        <RadioButton
+            android:id="@+id/radioButtonJugar3"
+            android:layout_width="match_parent"
+            android:layout_height="94dp"
+            android:text="RadioButton" />
+    </RadioGroup>
 </androidx.constraintlayout.widget.ConstraintLayout>

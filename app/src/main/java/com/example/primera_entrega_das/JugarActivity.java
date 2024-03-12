@@ -1,17 +1,14 @@
 package com.example.primera_entrega_das;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.TextView;
@@ -31,28 +28,61 @@ public class JugarActivity extends AppCompatActivity {
     private int contPreguntasMostradas = 0;
     private String respReal;
 
+    private RadioButton radioButtonR1, radioButtonR2, radioButtonR3;
+    private TextView textViewPregunta;
+
+    private Button btnSigPregunta;
+
+    private JugarViewModel jugarViewModel;
+
     //Parte necesaria para fragments
+    /*
     public static class HorizontalFragment extends Fragment {
+
         public View onCreateView(@NonNull LayoutInflater inflater,
                                  @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
             View v = inflater.inflate(R.layout.activity_jugar_landscape, container, false);
+            // Realiza tus operaciones habituales
             return v;
         }
     }
 
     public static class VerticalFragment extends Fragment {
+
         public View onCreateView(@NonNull LayoutInflater inflater,
                                  @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
             View v = inflater.inflate(R.layout.activity_jugar_portrait, container, false);
+            // Realiza tus operaciones habituales
             return v;
         }
     }
-
+    */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         super.setContentView(R.layout.activity_jugar);
+        jugarViewModel = new ViewModelProvider(this).get(JugarViewModel.class); //chatgpt
 
+
+        radioButtonR1 = findViewById(R.id.radioButtonJugar1);
+        radioButtonR2 = findViewById(R.id.radioButtonJugar2);
+        radioButtonR3 = findViewById(R.id.radioButtonJugar3);
+        textViewPregunta = findViewById(R.id.textViewPreguntaJugar);
+        btnSigPregunta = findViewById(R.id.botonSigPreg);
+        /*
+        try {
+            ModeloPregunta preguntaAlmacenada = jugarViewModel.getPregunta();
+            if (preguntaAlmacenada != null) {
+                // Restaurar la pregunta almacenada en el ViewModel
+                respReal = cargarPregunta(preguntaAlmacenada);
+                contPreguntasMostradas = savedInstanceState.getInt(KEY_CONTADOR, 0);
+                contPreguntasAcierto = savedInstanceState.getInt(KEY_CONT_ACIERTO, 0);
+            }
+            //No hay pregunta almacenada proseguir
+        } catch (Exception e) {
+            // excepción
+            e.printStackTrace();
+        }
 
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             // Cargar el Fragmento en modo horizontal
@@ -66,11 +96,24 @@ public class JugarActivity extends AppCompatActivity {
                     .replace(R.id.elFragmento, new VerticalFragment())
                     .commit();
         }
-
+        */
         //Log.d("PREGUNTA SOBRE TEMA",listaPreguntasTemas.get(iAleatorio).getPregunta());
         //Log.d("PREGUNTA SOBRE TEMA",listaPreguntasTemas.get(iAleatorio).getRespuestaCorrecta());
         //Log.d("PREGUNTA SOBRE TEMA", String.valueOf(listaPreguntasTemas.size()));
         //Guardar Pregunta en un fichero ?
+    }
+
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            // Cargar recursos específicos de landscape
+            setContentView(R.layout.activity_jugar_landscape);
+        } else {
+            // Cargar recursos específicos de portrait
+            setContentView(R.layout.activity_jugar);
+        }
     }
 
     @Override
@@ -85,6 +128,8 @@ public class JugarActivity extends AppCompatActivity {
         super.onRestoreInstanceState(savedInstanceState);
         contPreguntasMostradas = savedInstanceState.getInt(KEY_CONTADOR, 0);
         contPreguntasAcierto = savedInstanceState.getInt(KEY_CONT_ACIERTO, 0);
+
+
     }
 
 
@@ -92,16 +137,17 @@ public class JugarActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        View frag = super.getSupportFragmentManager().findFragmentById(R.id.elFragmento).getView();
+       // View frag = super.getSupportFragmentManager().findFragmentById(R.id.elFragmento).getView();
 
         Bundle extras = getIntent().getExtras();
-        if (frag != null) {
-            RadioButton radioButtonR1 = frag.findViewById(R.id.radioButtonJugar1);
-            RadioButton radioButtonR2 = frag.findViewById(R.id.radioButtonJugar2);
-            RadioButton radioButtonR3 = frag.findViewById(R.id.radioButtonJugar3);
-            TextView textViewPregunta = frag.findViewById(R.id.textViewPreguntaJugar);
-            Button btnSigPregunta = frag.findViewById(R.id.botonSigPreg);
-
+        //if (frag != null) {
+        /*
+            radioButtonR1 = findViewById(R.id.radioButtonJugar1);
+            radioButtonR2 = findViewById(R.id.radioButtonJugar2);
+            radioButtonR3 = findViewById(R.id.radioButtonJugar3);
+            textViewPregunta = findViewById(R.id.textViewPreguntaJugar);
+            Button btnSigPregunta = findViewById(R.id.botonSigPreg);
+*/
             OperacionesBD bd = new OperacionesBD(this, 1);
             if (extras != null) {
                 String tema = extras.getString("TemaJugar");
@@ -115,12 +161,14 @@ public class JugarActivity extends AppCompatActivity {
 
             primeraPreguntaMostrada = false;
 
+
             // y la verificacion de la pregunta y la noti
             //hacer inserciones en la bd desde un fichero de texto
             //preferencias con tema e idioma
             btnSigPregunta.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
                     if (contPreguntasMostradas < 3) {
                         if (!primeraPreguntaMostrada) {
                             // Si es la primera pregunta, verifica la respuesta sin cargar una nueva pregunta
@@ -174,13 +222,13 @@ public class JugarActivity extends AppCompatActivity {
                         // Inicia la actividad
                         v.getContext().startActivity(intent);
                         finish(); //finaliza esta actividad
-
                     }
+
                 }
             });
 
 
-        }
+        //}
     }
 
     // cargar pregunta da igual que sea aleatoria o de tema
@@ -194,6 +242,16 @@ public class JugarActivity extends AppCompatActivity {
         return mPregunta.getRespuestaCorrecta();
     }
 
+    // Método para cargar una pregunta y actualizar la interfaz
+    private String cargarPregunta(ModeloPregunta pregunta) {
+        textViewPregunta.setText(pregunta.getPregunta());
+        radioButtonR1.setText(pregunta.getRespuesta1());
+        radioButtonR2.setText(pregunta.getRespuesta2());
+        radioButtonR3.setText(pregunta.getRespuesta3());
+        respReal = pregunta.getRespuestaCorrecta();
+        return respReal;
+    }
+
     //clase para obtener una pregunta aleatoria dada una lista cualquiera, ya sea en base a un tema o no.
     public ModeloPregunta obtenerPreguntaLista(ArrayList<ModeloPregunta> listaPreguntas) {
 
@@ -204,7 +262,11 @@ public class JugarActivity extends AppCompatActivity {
 
         // Devolver la pregunta correspondiente al índice aleatorio
         // (puede repetirse una pregunta en caso de que haya pocas preguntas en la BD)
-        return listaPreguntas.get(iAleatorio);
+
+        ModeloPregunta nuevaPregunta = listaPreguntas.get(iAleatorio);
+
+        jugarViewModel.setPregunta(nuevaPregunta); //guardarla en el ViewModel para gestionar los giros
+        return nuevaPregunta;
     }
 
 
