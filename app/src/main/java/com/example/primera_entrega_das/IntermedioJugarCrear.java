@@ -46,7 +46,6 @@ public class IntermedioJugarCrear extends AppCompatActivity {
         intentJugar.putExtra("pregRespondida",0);
         this.startActivity(intentJugar);
         finish();
-
     }
 
     public void OnClickCrearPreg(View v){
