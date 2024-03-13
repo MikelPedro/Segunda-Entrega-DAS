@@ -3,21 +3,16 @@ package com.example.primera_entrega_das;
 
 
 import android.content.Context;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 import androidx.annotation.Nullable;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+
 
 public class BD extends SQLiteOpenHelper {
 
     private static final String BD_NOMBRE = "juego.db";
 
-    private Context context;
+    private final Context context;
     public BD(@Nullable Context context, int version) {
         super(context, BD_NOMBRE, null, version);
         this.context = context;

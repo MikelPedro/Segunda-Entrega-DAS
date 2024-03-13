@@ -18,10 +18,6 @@ public class ModeloPregunta {
         this.respuestaCorrecta = respuestaCorrecta;
     }
 
-    public int getCodigo() {
-        return codigo;
-    }
-
     public String getPregunta() {
         return pregunta;
     }

@@ -21,7 +21,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
 
 public class FinJuegoActivity extends AppCompatActivity {
 
@@ -96,7 +95,8 @@ public class FinJuegoActivity extends AppCompatActivity {
                 contPA = extras.getInt("pregCorrecta");
                 contPM = extras.getInt("pregRespondida");
                 //Mostrar mensaje con el numero de preguntas mostradas y acertadas
-                tvFinal.setText(String.format("Resultado del Juego:\nNumero de preguntas respondidas:%d\nNumero de respuestas correctas:%d", contPM, contPA));
+                tvFinal.setText(String.format("Resultado del Juego:\nNumero de preguntas respondidas:%d\n" +
+                        "Numero de respuestas correctas:%d", contPM, contPA));
             } else {
                 tvFinal.setText("Gracias por jugar");
             }
@@ -112,7 +112,7 @@ public class FinJuegoActivity extends AppCompatActivity {
 
     //Crear canal de notificaciones
     public void createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
 
             requestPermissions(new String[] {android.Manifest.permission.POST_NOTIFICATIONS}, 1);
             int importancia = NotificationManager.IMPORTANCE_HIGH;

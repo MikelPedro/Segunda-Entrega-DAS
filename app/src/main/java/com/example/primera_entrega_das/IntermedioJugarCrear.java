@@ -39,7 +39,7 @@ public class IntermedioJugarCrear extends AppCompatActivity {
         Intent intentJugar = new Intent(this, JugarActivity.class);
         OperacionesBD opBD = new OperacionesBD(this,1);
 
-        int idP = opBD.obtenerPregRandom("");
+        int idP = opBD.obtenerPregRandom(tema); // he cambiado aqui de "" a tema
         intentJugar.putExtra("idPregunta",idP);
         intentJugar.putExtra("TemaJugar",tema); // por si acaso puee dar problema
         intentJugar.putExtra("pregCorrecta",0);

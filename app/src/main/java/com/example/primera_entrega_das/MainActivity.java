@@ -2,28 +2,20 @@ package com.example.primera_entrega_das;
 
 
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 
+import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.database.sqlite.SQLiteDatabase;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.DialogFragment;
-import androidx.preference.PreferenceManager;
-
-import java.util.ArrayList;
 
 
-public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
+
+
+public class MainActivity extends AppCompatActivity{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,18 +26,12 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         setSupportActionBar(toolbar);
 
         OperacionesBD bd = new OperacionesBD(this, 1);
-        SQLiteDatabase db = bd.getWritableDatabase();
-
         // Llamada al método cargarPreguntasEnBD para cargar preguntas en la BD
-        bd.cargarPreguntasEnBD(db, this);
+        bd.cargarPreguntasEnBD(this);
 
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        preferences.registerOnSharedPreferenceChangeListener(this);
-        //TODO: Pantalla horizontal en fin juego activity
-        // Fragment (no perder info)
+        //TODO:
         // Idiomas
         // Estilo (preferencia)
-        // intent implicito
         // docu
 
     }
@@ -67,7 +53,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         // Inicia la actividad
         this.startActivity(intent);
         //getContext().startActivity(intent);
-        //finish(); si le das al triangulo no puedes volver atras
+        finish(); //si le das al triangulo no puedes volver atras
+
     }
 
     public void OnClickJugar(View v){
@@ -89,16 +76,5 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         dialogo.show(getSupportFragmentManager(), "dialogoIcono");
     }
 
-    /*
-    public void OnClickConfig(MenuItem item){
-        Intent intent = new Intent(this, Configuracion.class);
-        startActivity(intent);
-    }
-    */
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, @Nullable String key) {
-        if (key.equals("language_preference") || key.equals("theme_preference")) {
-            recreate(); // Vuelve a crear la actividad para aplicar los cambios
-        }
-    }
+
 }
