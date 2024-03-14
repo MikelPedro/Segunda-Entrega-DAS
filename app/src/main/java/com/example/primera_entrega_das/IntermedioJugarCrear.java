@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 public class IntermedioJugarCrear extends AppCompatActivity {
     private String tema;
+
+    private int imagenId;
     private ImageView imageView;
 
     @Override
@@ -22,7 +24,7 @@ public class IntermedioJugarCrear extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
            tema = extras.getString("Tema");
-            int imagenId = extras.getInt("Imagen");
+            imagenId = extras.getInt("Imagen");
 
             // Carga la imagen en el ImageView
             imageView.setImageResource(imagenId);
@@ -35,7 +37,7 @@ public class IntermedioJugarCrear extends AppCompatActivity {
     }
 
     public void OnClickJugar(View v){
-        // aparece la pantalla de Jugar (fragment)
+        // aparece la pantalla de Jugar
         Intent intentJugar = new Intent(this, JugarActivity.class);
         OperacionesBD opBD = new OperacionesBD(this,1);
 
@@ -44,6 +46,7 @@ public class IntermedioJugarCrear extends AppCompatActivity {
         intentJugar.putExtra("TemaJugar",tema); // por si acaso puee dar problema
         intentJugar.putExtra("pregCorrecta",0);
         intentJugar.putExtra("pregRespondida",0);
+        intentJugar.putExtra("imgJugarTema",imagenId);
         this.startActivity(intentJugar);
         finish();
     }

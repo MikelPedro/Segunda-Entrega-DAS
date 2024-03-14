@@ -1,7 +1,8 @@
 package com.example.primera_entrega_das;
 
-
 public class ModeloPregunta {
+
+    //Clase para guardar todos los atributos relacionados con la pregunta en una clase llamada ModeloPregunta
     private final int codigo;
     private final String pregunta;
     private final String respuesta1;
@@ -18,6 +19,7 @@ public class ModeloPregunta {
         this.respuestaCorrecta = respuestaCorrecta;
     }
 
+    //Getters
     public String getPregunta() {
         return pregunta;
     }

@@ -10,10 +10,9 @@
         android:id="@+id/textViewPreguntaJugar"
         android:layout_width="251dp"
         android:layout_height="118dp"
-        android:layout_marginTop="88dp"
+        android:layout_marginTop="128dp"
         android:text="TextView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -27,6 +26,16 @@
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/radioGroup2" />
+
+    <ImageView
+        android:id="@+id/imgJugarTema"
+        android:layout_width="75dp"
+        android:layout_height="73dp"
+        app:layout_constraintBottom_toTopOf="@+id/textViewPreguntaJugar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@tools:sample/avatars" />
 
     <RadioGroup
         android:id="@+id/radioGroup2"
@@ -55,4 +64,5 @@
             android:layout_height="94dp"
             android:text="RadioButton" />
     </RadioGroup>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

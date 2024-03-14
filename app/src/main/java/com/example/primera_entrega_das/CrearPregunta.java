@@ -16,15 +16,13 @@ public class CrearPregunta extends AppCompatActivity {
     private EditText editTextPregunta, editTextRespuesta1, editTextRespuesta2, editTextRespuesta3;
     private RadioButton radioButtonRespuesta1, radioButtonRespuesta2, radioButtonRespuesta3;
     private String tema;
-    private BD miBD;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_crear_pregunta);
 
-        //Crear un puntero a la base de datos
-        this.miBD = new BD (this, 1);
-
+        //Encontrar todos los editTexts y radioButtons
         editTextPregunta = findViewById(R.id.laPregunta);
         editTextRespuesta1 = findViewById(R.id.editTextRespuesta1);
         editTextRespuesta2 = findViewById(R.id.editTextRespuesta2);
@@ -36,7 +34,7 @@ public class CrearPregunta extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            tema = extras.getString("TemaCP");
+            tema = extras.getString("TemaCP"); //coger tema que hemos guardado en el intent
 
             TextView temaTextView = findViewById(R.id.textTema);
 
@@ -45,6 +43,7 @@ public class CrearPregunta extends AppCompatActivity {
 
     }
 
+    //Encontrar el radioButton que esta marcado por el usuario, para indicar la respuesta correcta
     private String obtenerRespuestaCorrecta() {
         if (radioButtonRespuesta1.isChecked()) {
             return editTextRespuesta1.getText().toString();
@@ -57,7 +56,8 @@ public class CrearPregunta extends AppCompatActivity {
     }
 
     public void OnClickPregunta(View v){
-      // guardar pregunta en la BD y que aparezca dialogo o noti de que se ha guardado correctamente
+
+        // Guardar pregunta en la BD y que aparezca dialogo de que se ha guardado correctamente
 
         // Obtener la pregunta y las respuestas ingresadas por el usuario
         String pregunta = editTextPregunta.getText().toString();
@@ -68,8 +68,8 @@ public class CrearPregunta extends AppCompatActivity {
         // Obtener la respuesta correcta seleccionada
         String respuestaCorrecta = obtenerRespuestaCorrecta();
 
-        //Guardar en la BD:
-        //llamada a la clase que contiene el metodo en la BD
+
+        //llamada a la clase que contiene el metodo en la BD para guardar la pregunta
         OperacionesBD bd = new OperacionesBD(this,1);
         long id = bd.insertarPregunta(pregunta,tema,respuesta1,respuesta2,respuesta3,respuestaCorrecta);
         Log.d("id en la BD",String.valueOf(id));

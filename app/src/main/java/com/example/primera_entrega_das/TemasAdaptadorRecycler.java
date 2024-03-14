@@ -18,7 +18,7 @@ public class TemasAdaptadorRecycler extends RecyclerView.Adapter<TemasAdaptadorR
     Context contexto;
     ArrayList<ModeloTemas> modeloTemas;
 
-
+    //Constructor
     public TemasAdaptadorRecycler(Context contexto, ArrayList<ModeloTemas> modeloTemas,RecyclerViewInterface recyclerViewInterface){
         this.contexto = contexto;
         this.modeloTemas = modeloTemas;
@@ -67,7 +67,7 @@ public class TemasAdaptadorRecycler extends RecyclerView.Adapter<TemasAdaptadorR
                         int pos = getAdapterPosition();
 
                         if(pos != RecyclerView.NO_POSITION){
-                            recyclerViewInterface.onItemClick(pos);
+                            recyclerViewInterface.onItemClick(pos); //llamada al metodo de la interfaz con la posicion del card view que hemos seleccionado
                         }
                     }
                 }

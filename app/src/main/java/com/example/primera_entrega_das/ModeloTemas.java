@@ -2,6 +2,7 @@ package com.example.primera_entrega_das;
 
 public class ModeloTemas {
 
+    //Clase para guardar todos los atributos relacionados con el tema en una clase llamada Tema
     private final int imagenId;
     private final String titulo;
     private final String descripcion;
@@ -12,7 +13,7 @@ public class ModeloTemas {
         this.imagenId = imagenId;
     }
 
-
+    //Getters
     public int getImagenId() {
         return imagenId;
     }

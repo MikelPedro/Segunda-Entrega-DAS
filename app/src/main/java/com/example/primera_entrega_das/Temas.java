@@ -12,8 +12,9 @@ import java.util.ArrayList;
 
 public class Temas extends AppCompatActivity implements RecyclerViewInterface{
 
-    ArrayList<ModeloTemas> modeloTemas = new ArrayList<>();
+    ArrayList<ModeloTemas> modeloTemas = new ArrayList<>(); //arraylist de objetos modeloTemas
 
+    //imagenes que se usan en los CardViews
     int[] imagenes = {R.drawable.baseline_computer_24,R.drawable.baseline_brush_24,R.drawable.baseline_sports_football_24,
                         R.drawable.baseline_map_24, R.drawable.baseline_science_24};
     @Override
@@ -21,10 +22,14 @@ public class Temas extends AppCompatActivity implements RecyclerViewInterface{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_temas);
 
+        //encontrar el recycler view en el xml
         RecyclerView recyclerView = findViewById(R.id.miRecyclerView);
-        crearModeloTemas();
+        crearModeloTemas(); //guardar todos los elementos de los temas
+        //Crear adaptador para el recycler view.
         TemasAdaptadorRecycler adapter = new TemasAdaptadorRecycler(this,modeloTemas,this);
+        //Establece el adaptador
         recyclerView.setAdapter(adapter);
+        //Se asegura que los elementos se muestren en una lista verticalmente desplazable
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
@@ -40,11 +45,12 @@ public class Temas extends AppCompatActivity implements RecyclerViewInterface{
         }
     }
 
+    //Metodo el cual se va a llamar al darle click en un tema del recycler view
     @Override
     public void onItemClick(int posicion) {
 
         Intent intent = new Intent(Temas.this,IntermedioJugarCrear.class);
-        //pasar el nombre del tema a la otra actividad
+        //guardar en el intent el nombre del tema e id de la imagen
         intent.putExtra("Tema",modeloTemas.get(posicion).getTitulo());
         intent.putExtra("Imagen",modeloTemas.get(posicion).getImagenId());
         startActivity(intent);

@@ -23,6 +23,7 @@ public class DialogoCP extends DialogFragment {
         builder.setMessage("Se ha guardado correctamente la pregunta en la base de datos. " +
                 "Puedes seguir creando preguntas o volver al menu principal");
 
+        //Opcion que se muestra en el dialogo
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
