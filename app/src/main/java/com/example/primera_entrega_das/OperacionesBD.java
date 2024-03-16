@@ -160,13 +160,13 @@ public class OperacionesBD extends BD{
                 bufferedReader.close();
                 inputStream.close();
             } else {
-                Log.e("BD", "Context es nulo");
+                Log.d("BD", "Context es nulo");
             }
         } catch (SQLException e) {
-            Log.e("BD", "Error al ejecutar sentencia SQL: " + e.getMessage());
+            Log.d("BD", "Error al ejecutar sentencia SQL: " + e.getMessage());
             e.printStackTrace();
         } catch (IOException e) {
-            Log.e("BD", "Error de entrada/salida: " + e.getMessage());
+            Log.d("BD", "Error de entrada/salida: " + e.getMessage());
             e.printStackTrace();
         }
     }

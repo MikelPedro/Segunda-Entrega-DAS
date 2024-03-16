@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity{
         OperacionesBD opBD = new OperacionesBD(this,1);
 
         int idP = opBD.obtenerPregRandom(""); //para obtener preguntas de todos los temas pasa por parametro ""
+        //se devuelve el id de una pregunta random
         //se guarda en el intent los parametros necesarios
         intentJugar.putExtra("idPregunta",idP);
         intentJugar.putExtra("TemaJugar","");
