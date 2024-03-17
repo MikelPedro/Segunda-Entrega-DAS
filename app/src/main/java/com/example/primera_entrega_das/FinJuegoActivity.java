@@ -97,8 +97,8 @@ public class FinJuegoActivity extends AppCompatActivity {
                 contPA = extras.getInt("pregCorrecta");
                 contPM = extras.getInt("pregRespondida");
                 //Mostrar mensaje con el numero de preguntas mostradas y acertadas
-                tvFinal.setText(String.format("Resultado del Juego:\nNumero de preguntas respondidas:%d\n" +
-                        "Numero de respuestas correctas:%d", contPM, contPA));
+                tvFinal.setText(String.format("Resultado del Juego:\nNúmero de preguntas respondidas:%d\n" +
+                        "Número de respuestas correctas:%d", contPM, contPA));
             } else {
                 tvFinal.setText("Gracias por jugar");
             }
@@ -129,7 +129,7 @@ public class FinJuegoActivity extends AppCompatActivity {
         Intent intentMensaje = new Intent(Intent.ACTION_SEND);
         intentMensaje.setType("text/plain");
         intentMensaje.putExtra(Intent.EXTRA_TEXT, "Mira mi resultado en la app Preguntas:\n" +
-                String.format("Resultado del Juego:\nNumero de preguntas respondidas:%s\nNumero de respuestas correctas:%s", contPM, contPA));
+                String.format("Resultado del Juego:\nNúmero de preguntas respondidas:%s\nNúmero de respuestas correctas:%s", contPM, contPA));
 
         //crear pending intent en el que se incluye el intent con la opcion de compartir el resultado obtenido
         PendingIntent pendingIntentMensaje = PendingIntent.getActivity(this, 0, intentMensaje, PendingIntent.FLAG_IMMUTABLE);

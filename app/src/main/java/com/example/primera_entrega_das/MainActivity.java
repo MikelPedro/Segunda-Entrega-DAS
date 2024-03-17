@@ -16,7 +16,7 @@ public class MainActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //Encontrar la toolbar que he creado
+        //Encontrar la actionbar que he creado
         Toolbar toolbar = findViewById(R.id.labarra);
         setSupportActionBar(toolbar);
 
@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity{
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_labarra,menu); //para que aparezca el menu de la toolbar
+        getMenuInflater().inflate(R.menu.menu_labarra,menu); //para que aparezca el menu de la actionbar (icono, textos, boton)
         return true;
     }
 
@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity{
         //Añadir al intent informacion como el nombre de la opcion seleccionada
         // Inicia la actividad
         this.startActivity(intent);
-        //si le das al triangulo te saca de la app
+        //si le das al triangulo te saca de la aplicación
         finish();
 
     }
@@ -58,11 +58,12 @@ public class MainActivity extends AppCompatActivity{
         intentJugar.putExtra("pregRespondida",0);
         intentJugar.putExtra("imgJugarTema",R.drawable.img_jugar_tema); //icono para preguntas aleatorias
         this.startActivity(intentJugar);
+        //si le das al triangulo te saca de la aplicación
         finish();
     }
 
     public void OnClickIconoPregunta(MenuItem item){
-        //Mostrar dialogo con 2 opciones
+        //Mostrar dialogo con 2 opciones (ver enlace y volver)
         DialogFragment dialogo = new DialogoWiki();
         dialogo.show(getSupportFragmentManager(), "dialogoIcono");
     }
