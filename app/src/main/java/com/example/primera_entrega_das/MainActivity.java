@@ -68,4 +68,8 @@ public class MainActivity extends AppCompatActivity{
         dialogo.show(getSupportFragmentManager(), "dialogoIcono");
     }
 
+    public void OnClickPruebas(View v){
+        Intent i = new Intent(this,InicioAplicacion.class);
+        this.startActivity(i);
+    }
 }
