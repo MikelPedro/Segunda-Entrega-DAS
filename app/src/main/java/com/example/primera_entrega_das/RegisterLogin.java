@@ -39,4 +39,11 @@ public class RegisterLogin extends AppCompatActivity {
         this.startActivity(intentVolver);
         finish();
     }
+
+    public void OnClickRegistro(View v){
+        //Mostrar dialogo para volver a la pantalla de inicio
+        DialogFragment dialogo = new DialogoRegistro();
+        dialogo.show(getSupportFragmentManager(), "dialogoReg");
+    }
+
 }
