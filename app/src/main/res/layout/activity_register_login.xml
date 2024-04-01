@@ -43,7 +43,7 @@
 
 
     <EditText
-        android:id="@+id/editTextText"
+        android:id="@+id/editTextNombre"
         android:layout_width="210dp"
         android:layout_height="53dp"
         android:layout_marginTop="56dp"
@@ -65,7 +65,7 @@
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextText"
+        app:layout_constraintTop_toBottomOf="@+id/editTextNombre"
         android:hint="Contraseña"
         android:backgroundTint="@color/colorBoton1"/>
 

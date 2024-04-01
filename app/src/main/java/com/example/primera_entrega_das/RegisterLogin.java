@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
 
 public class RegisterLogin extends AppCompatActivity {
 
@@ -41,9 +43,23 @@ public class RegisterLogin extends AppCompatActivity {
     }
 
     public void OnClickRegistro(View v){
-        //Mostrar dialogo para volver a la pantalla de inicio
-        DialogFragment dialogo = new DialogoRegistro();
-        dialogo.show(getSupportFragmentManager(), "dialogoReg");
+
+        //Obtener los editTexts y su contenido
+        EditText editTextNombre = this.findViewById(R.id.editTextNombre);
+        EditText editTextPass = this.findViewById(R.id.editTextTextPassword);
+        String nombre = editTextNombre.getText().toString().trim(); //se convierte a string y se elimina espacios en blanco
+        String contraseña = editTextPass.getText().toString().trim();
+
+        //Comprobar que ninguno de los campos esta vacio
+        if (!nombre.isEmpty() && !contraseña.isEmpty()) {
+            //Mostrar dialogo para volver a la pantalla de inicio
+            DialogFragment dialogo = new DialogoRegistro();
+            dialogo.show(getSupportFragmentManager(), "dialogoReg");
+        }else{
+            // Mostrar un mensaje por pantalla si uno o ambos EditText están vacíos
+            Toast.makeText(this, "Por favor, completa ambos campos", Toast.LENGTH_SHORT).show();
+        }
     }
 
 }
+

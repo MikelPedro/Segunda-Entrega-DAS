@@ -4,9 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
@@ -26,11 +24,13 @@ public class DialogoRegistro extends DialogFragment {
         builder.setPositiveButton("Vale", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+
                 // Intent para volver a la pantalla de inicio
                 Intent iVolver = new Intent(getActivity(), InicioAplicacion.class);
                 startActivity(iVolver);
                 getActivity().finish(); // Cerrar la actividad actual
                 dismiss();
+
             }
         });
         return builder.create();
