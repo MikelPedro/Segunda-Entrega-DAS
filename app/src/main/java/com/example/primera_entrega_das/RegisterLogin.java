@@ -3,6 +3,9 @@ package com.example.primera_entrega_das;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
+import androidx.work.Data;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -55,6 +58,22 @@ public class RegisterLogin extends AppCompatActivity {
             //Mostrar dialogo para volver a la pantalla de inicio
             DialogFragment dialogo = new DialogoRegistro();
             dialogo.show(getSupportFragmentManager(), "dialogoReg");
+
+            //Para mandar los datos a la bd
+            Data datos = new Data.Builder()
+                    .putString("nom",nombre)
+                    .putString("cont",contraseña)
+                    .build();
+
+            //Para mandar al doWork
+            OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDRemota.class)
+                    .setInputData(datos)
+                    .build();
+
+            WorkManager.getInstance(this).enqueue(otwr);
+
+
+
         }else{
             // Mostrar un mensaje por pantalla si uno o ambos EditText están vacíos
             Toast.makeText(this, "Por favor, completa ambos campos", Toast.LENGTH_SHORT).show();
