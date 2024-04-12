@@ -48,8 +48,8 @@ public class RegisterLogin extends AppCompatActivity {
     public void OnClickRegistro(View v){
 
         //Obtener los editTexts y su contenido
-        EditText editTextNombre = this.findViewById(R.id.editTextNombre);
-        EditText editTextPass = this.findViewById(R.id.editTextTextPassword);
+        EditText editTextNombre = this.findViewById(R.id.editTextNom);
+        EditText editTextPass = this.findViewById(R.id.editTextTextPass);
         String nombre = editTextNombre.getText().toString().trim(); //se convierte a string y se elimina espacios en blanco
         String contraseña = editTextPass.getText().toString().trim();
 
@@ -63,6 +63,7 @@ public class RegisterLogin extends AppCompatActivity {
             Data datos = new Data.Builder()
                     .putString("nom",nombre)
                     .putString("cont",contraseña)
+                    .putString("reg","si")
                     .build();
 
             //One time work, llama al dowork que esta en la clase de la conexion con la BD remota
