@@ -20,7 +20,7 @@ import android.widget.Toast;
 
 
 
-public class InicioAplicacion extends AppCompatActivity {
+public class InicioAplicacion extends AppCompatActivity{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +54,6 @@ public class InicioAplicacion extends AppCompatActivity {
 
         //Comprobar que ninguno de los campos esta vacio
         if (!nombre.isEmpty() && !contraseña.isEmpty()) {
-            //Mostrar dialogo para volver a la pantalla de inicio
 
             //Para mandar los datos a la bd
             Data datos = new Data.Builder()
@@ -63,32 +62,25 @@ public class InicioAplicacion extends AppCompatActivity {
                     .putString("reg","no")
                     .build();
 
-            //One time work, llama al dowork que esta en la clase de la conexion con la BD remota
             OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDRemota.class)
                     .setInputData(datos)
                     .build();
-
-           // WorkManager.getInstance(this).enqueue(otwr);
             Log.d("LOGIN", "llega antes del workmanager" + nombre + " " + contraseña);
-            Log.d("LOGIN", String.valueOf(otwr.getId()));
-            //WorkManager.getInstance(this).enqueue(otwr);
-
-            // Observar el resultado de la tarea de trabajo
-            WorkManager.getInstance(this).getWorkInfoByIdLiveData(otwr.getId()).observe(this, new Observer<WorkInfo>() {
-                @Override
-                public void onChanged(WorkInfo workInfo) {
-                    Log.d("LOGIN", "estamos fuera del if workInfo");
-                    if (workInfo != null && workInfo.getState().isFinished()) {
-                        Log.d("LOGIN", "estamos dentro del if workInfo");
-                        // Iniciar la actividad principal (MainActivity) si el result es success
-                        //Intent intent = new Intent(InicioAplicacion.this, MainActivity.class);
-                        //intent.putExtra("nombreUsu", nombre); // Se pasa el nombre de usuario
-                        //startActivity(intent);
-                        //finish(); // Cerrar la actividad de inicio de sesión
-                    }
-                }
-            });
-
+            WorkManager.getInstance(this).getWorkInfoByIdLiveData(otwr.getId())
+                    .observe(this, new Observer<WorkInfo>() {
+                        @Override
+                        public void onChanged(WorkInfo workInfo) {
+                            if(workInfo != null && workInfo.getState().isFinished()){
+                                Log.d("LOGIN", "despues del workmanager");
+                                // Iniciar la actividad principal (MainActivity) si el result es success
+                                Intent main = new Intent(InicioAplicacion.this, MainActivity.class);
+                                main.putExtra("nombreUsu", nombre); // Se pasa el nombre de usuario
+                                startActivity(main);
+                                finish(); // Cerrar la actividad de inicio de sesión
+                            }
+                        }
+                    });
+            WorkManager.getInstance(this).enqueue(otwr);
 
         }else{
             // Mostrar un mensaje por pantalla si uno o ambos EditText están vacíos
