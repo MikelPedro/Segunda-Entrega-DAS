@@ -7,10 +7,10 @@
     tools:context=".RegisterLogin">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/labarra"
+        android:id="@+id/labarraInicio"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#E91E63"
+        android:background="#0097A7"
         android:elevation="4dp"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
@@ -27,7 +27,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/labarra"
+        app:layout_constraintTop_toBottomOf="@+id/labarraInicio"
         app:srcCompat="@drawable/registrarse" />
 
     <TextView

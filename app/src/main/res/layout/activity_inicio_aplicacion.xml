@@ -7,10 +7,10 @@
     tools:context=".InicioAplicacion">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/labarra"
+        android:id="@+id/labarraInicio"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#E91E63"
+        android:background="#0097A7"
         android:elevation="4dp"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
@@ -22,11 +22,11 @@
         android:id="@+id/textViewInicio"
         android:layout_width="259dp"
         android:layout_height="59dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="32dp"
         android:text="¡Hola y bienvenido a Preguntas!"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/labarra" />
+        app:layout_constraintTop_toBottomOf="@+id/labarraInicio" />
 
     <ImageView
         android:id="@+id/imageView3"

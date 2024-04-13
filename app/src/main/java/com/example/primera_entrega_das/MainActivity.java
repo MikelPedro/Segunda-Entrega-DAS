@@ -68,6 +68,12 @@ public class MainActivity extends AppCompatActivity{
         dialogo.show(getSupportFragmentManager(), "dialogoIcono");
     }
 
+    public void OnClickIconoPerfil(MenuItem item){
+        //Al darle click te lleva a la pagina del perfil del usuario
+        Intent perfil = new Intent(this,PerfilUsuario.class);
+        this.startActivity(perfil);
+    }
+
     public void OnClickPruebas(View v){
         Intent i = new Intent(this,InicioAplicacion.class);
         this.startActivity(i);

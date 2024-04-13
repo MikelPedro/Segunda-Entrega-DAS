@@ -28,13 +28,14 @@ public class InicioAplicacion extends AppCompatActivity{
         setContentView(R.layout.activity_inicio_aplicacion);
 
         //Encontrar la actionbar que he creado
-        Toolbar toolbar = findViewById(R.id.labarra);
+        Toolbar toolbar = findViewById(R.id.labarraInicio);
         setSupportActionBar(toolbar);
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_labarra,menu); //para que aparezca el menu de la actionbar (icono, textos, boton)
+        getMenuInflater().inflate(R.menu.menu_labarrainicio,menu); //para que aparezca el menu de la actionbar (icono, textos, boton)
         return true;
     }
 

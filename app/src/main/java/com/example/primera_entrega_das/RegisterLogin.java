@@ -23,13 +23,13 @@ public class RegisterLogin extends AppCompatActivity {
         setContentView(R.layout.activity_register_login);
 
         //Encontrar la actionbar que he creado
-        Toolbar toolbar = findViewById(R.id.labarra);
+        Toolbar toolbar = findViewById(R.id.labarraInicio);
         setSupportActionBar(toolbar);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_labarra,menu); //para que aparezca el menu de la actionbar (icono, textos, boton)
+        getMenuInflater().inflate(R.menu.menu_labarrainicio,menu); //para que aparezca el menu de la actionbar (icono, textos, boton)
         return true;
     }
 
@@ -38,6 +38,7 @@ public class RegisterLogin extends AppCompatActivity {
         DialogFragment dialogo = new DialogoWiki();
         dialogo.show(getSupportFragmentManager(), "dialogoIcono");
     }
+
 
     public void OnClickVolver(View v){
         Intent intentVolver = new Intent(this,InicioAplicacion.class);
