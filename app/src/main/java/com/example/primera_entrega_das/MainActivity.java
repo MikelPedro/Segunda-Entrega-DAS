@@ -11,6 +11,8 @@ import androidx.fragment.app.DialogFragment;
 
 public class MainActivity extends AppCompatActivity{
 
+    private String nombreUsu = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,6 +25,14 @@ public class MainActivity extends AppCompatActivity{
         OperacionesBD bd = new OperacionesBD(this, 1);
         // Llamada al método cargarPreguntasEnBD para cargar todas las preguntas de un archivo en la BD
         bd.cargarPreguntasEnBD(this);
+
+        Bundle extras = getIntent().getExtras();
+        //el if es temporal hasta que solo aparezca la pantalla de login como principal
+        if(extras !=null){
+            nombreUsu = extras.getString("nombreUsu");
+        }else{
+            nombreUsu="";
+        }
 
     }
 
@@ -71,6 +81,7 @@ public class MainActivity extends AppCompatActivity{
     public void OnClickIconoPerfil(MenuItem item){
         //Al darle click te lleva a la pagina del perfil del usuario
         Intent perfil = new Intent(this,PerfilUsuario.class);
+        perfil.putExtra("nombreUsu",nombreUsu);
         this.startActivity(perfil);
     }
 

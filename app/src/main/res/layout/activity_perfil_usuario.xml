@@ -6,6 +6,19 @@
     android:layout_height="match_parent">
 
 
+    <ImageButton
+        android:id="@+id/imageBtnCamara"
+        android:layout_width="84dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="56dp"
+        android:background="@color/white"
+        android:contentDescription="Para sacar una foto desde la camara"
+        android:src="@drawable/baseline_photo_camera_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.3"
+        app:layout_constraintStart_toEndOf="@+id/button7"
+        app:layout_constraintTop_toBottomOf="@+id/textViewPts" />
+
     <TextView
         android:id="@+id/textView3"
         android:layout_width="275dp"
@@ -40,12 +53,12 @@
         android:id="@+id/textViewNombre"
         android:layout_width="340dp"
         android:layout_height="54dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="36dp"
         android:text="Nombre:"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.225"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imagePerfil" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView5" />
 
     <TextView
         android:id="@+id/textViewPts"
@@ -62,21 +75,20 @@
         android:id="@+id/button7"
         android:layout_width="118dp"
         android:layout_height="50dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginStart="76dp"
+        android:layout_marginTop="56dp"
         android:text="Subir Imagen"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewPts" />
 
     <ImageView
-        android:id="@+id/imagePerfil"
-        android:layout_width="121dp"
-        android:layout_height="135dp"
-        android:layout_marginTop="96dp"
+        android:id="@+id/imageView5"
+        android:layout_width="163dp"
+        android:layout_height="165dp"
+        android:layout_marginTop="32dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView3"
-        app:srcCompat="@drawable/imagen_jugar" />
+        app:srcCompat="@drawable/baseline_person_24_red" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
