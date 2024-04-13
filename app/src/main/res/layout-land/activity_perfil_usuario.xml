@@ -70,7 +70,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
-        android:id="@+id/imageView5"
+        android:id="@+id/imagePerfil"
         android:layout_width="163dp"
         android:layout_height="165dp"
         android:layout_marginStart="64dp"
