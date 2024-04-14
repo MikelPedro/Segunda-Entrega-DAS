@@ -4,12 +4,15 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 import androidx.work.Data;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -24,12 +27,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
+
 public class PerfilUsuario extends AppCompatActivity {
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_CAMERA_PERMISSION = 10;
     private String nomUsuario = "";
     private ImageView imgPerfil;
+    private Bitmap laminiatura;
 
     private ActivityResultLauncher<Intent> takePictureLauncher =
             registerForActivityResult(new
@@ -37,9 +43,12 @@ public class PerfilUsuario extends AppCompatActivity {
                 if (result.getResultCode() == RESULT_OK &&
                         result.getData()!= null) {
                     Bundle bundle = result.getData().getExtras();
-                    ImageView elImageView = findViewById(R.id.imageView);
-                    Bitmap laminiatura = (Bitmap) bundle.get("data");
+                    ImageView elImageView = findViewById(R.id.imagePerfil);
+                    laminiatura = (Bitmap) bundle.get("data");
+                    Log.d("IMAGEN", "LA MINIATURA: " + laminiatura);
                     elImageView.setImageBitmap(laminiatura);
+                    Log.d("IMAGEN","llegga aqui");
+
                 } else {
                     Log.d("TakenPicture", "No se ha tomado una foto");
                 }
@@ -63,9 +72,19 @@ public class PerfilUsuario extends AppCompatActivity {
         //cargar la foto (si tiene el usuario)
         obtenerImagenPerfil();
 
+
     }
 
-
+    public void OnClickAbrirCamara(View v){
+        // Verificar si se tienen los permisos necesarios
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            // Si los permisos no están otorgados, solicitarlos al usuario
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
+        } else {
+            // Si los permisos ya están otorgados, abrir la cámara
+            camara();
+        }
+    }
 
     public void OnClickVolverMain(View v){
         //Al darle click te lleva a la MainActivity
@@ -75,6 +94,7 @@ public class PerfilUsuario extends AppCompatActivity {
     }
 
     public void onClickSubirFoto(View v){
+        Log.d("IMAGEN","pulso boton de subir");
         subirImagenPerfil();
     }
 
@@ -82,17 +102,26 @@ public class PerfilUsuario extends AppCompatActivity {
     //Sacar una foot y subirla a la BD remota
     private void subirImagenPerfil(){
 
-        //Para mandar los datos a la bd
-        Data datosSubir = new Data.Builder()
-                .putString("nom",nomUsuario)
-                .putString("accion","subir")
-                .build();
+        if (laminiatura != null){
 
-        OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDRemota.class)
-                .setInputData(datosSubir)
-                .build();
+            String foto64 = this.transformarBitMapAString(laminiatura);
+            Log.d("IMAGEN","La foto en subir" + foto64);
+            //Para mandar los datos a la bd
+            Data datosSubir = new Data.Builder()
+                    .putString("nom",nomUsuario)
+                    .putString("imagen", foto64)
+                    .putString("reg","subir")
+                    .build();
 
-        WorkManager.getInstance(this).enqueue(otwr);
+            OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDRemota.class)
+                    .setInputData(datosSubir)
+                    .build();
+
+            WorkManager.getInstance(this).enqueue(otwr);
+            //Toast para indicar al usuario que se ha cargado la foto en la BD
+            Toast.makeText(this, "Se ha cargado la foto en la BD", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
 
@@ -102,29 +131,36 @@ public class PerfilUsuario extends AppCompatActivity {
         //Para mandar los datos a la bd
         Data datosObtener = new Data.Builder()
                 .putString("nom",nomUsuario)
-                .putString("accion","obtener")
+                .putString("reg","obtener")
                 .build();
 
-        OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDRemota.class)
+        Log.d("IMAGEN", "Construye el DATA en obtener imagen perfil");
+        OneTimeWorkRequest otwr1 = new OneTimeWorkRequest.Builder(conexionBDRemota.class)
                 .setInputData(datosObtener)
                 .build();
 
-        WorkManager.getInstance(this).getWorkInfoByIdLiveData(otwr.getId())
+        WorkManager.getInstance(this).getWorkInfoByIdLiveData(otwr1.getId())
                 .observe(this, new Observer<WorkInfo>() {
                     @Override
                     public void onChanged(WorkInfo workInfo) {
-                        if(workInfo != null && workInfo.getState() == WorkInfo.State.SUCCEEDED){
+                        if(workInfo != null && workInfo.getState().isFinished()){
 
-                            byte[] decodedString = Base64.decode(workInfo.getOutputData().toString(), Base64.DEFAULT);
-                            Bitmap loadedBitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                            imgPerfil.setImageBitmap(loadedBitmap);
+                            // Obtener la salida de la tarea de WorkManager (en este caso, la imagen de perfil)
+                            Bitmap imagenPerfil = RecogerImagen.getInstance().getFoto();
+                            if (imagenPerfil != null) {
+                                // Si se cargó la imagen desde la base de datos, establecerla en el ImageView
+                                imgPerfil.setImageBitmap(imagenPerfil);
+                            } else {
+                                // Si no se cargó la imagen desde la base de datos, establecer la imagen predeterminada
+                                imgPerfil.setImageResource(R.drawable.baseline_person_24_red);
+                            }
                         }else {
                             Log.d("IMAGEN", "No se ha cargado la imagen");
-                            Toast.makeText(PerfilUsuario.this,"Error al cargar imagen", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(PerfilUsuario.this,"No se ha cargado imagen", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
-        WorkManager.getInstance(this).enqueue(otwr);
+        WorkManager.getInstance(this).enqueue(otwr1);
 
     }
 
@@ -133,10 +169,6 @@ public class PerfilUsuario extends AppCompatActivity {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         takePictureLauncher.launch(intent);
     }
-
-
-
-
 
 
     @Override
@@ -153,6 +185,15 @@ public class PerfilUsuario extends AppCompatActivity {
                 Toast.makeText(this, "Permiso de la cámara denegado", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    //Metodo para transformar bitmap a string
+    private String transformarBitMapAString(Bitmap imagenBitMap){
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        imagenBitMap.compress(Bitmap.CompressFormat.JPEG, 30, stream);
+        byte[] fototransformada = stream.toByteArray();
+        String fotoen64 = Base64.encodeToString(fototransformada,Base64.DEFAULT);
+        return fotoen64;
     }
 
 
