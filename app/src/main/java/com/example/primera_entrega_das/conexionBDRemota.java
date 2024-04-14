@@ -7,6 +7,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
+import androidx.work.Data;
 
 import org.json.JSONObject;
 
@@ -35,7 +36,6 @@ public class conexionBDRemota extends Worker {
         if (reg.equals("si")){
             return registro(nomUsu,contraseña);
         }else{
-            Log.d("LOGIN", "llega al else");
             return login(nomUsu,contraseña);
         }
 
@@ -108,6 +108,85 @@ public class conexionBDRemota extends Worker {
             Log.d("REGISTRO","EXCEPCION");
             return Result.failure(); // Devuelve null en caso de error
         }
+
+    }
+
+    private Result obtenerImagenPerfil(String nomUsuario) {
+        // Aquí deberías escribir la lógica para obtener la imagen del perfil del usuario desde la base de datos remota
+        // y convertirla en una cadena Base64
+        // Por ejemplo:
+        String imagenBase64 = obtenerImagenBD(nomUsuario);
+
+        // Crear un objeto de salida con la imagen en formato Base64
+        Data outputData = new Data.Builder()
+                .putString("imagenBase64", imagenBase64)
+                .build();
+
+        // Devolver el resultado con la imagen Base64
+        return Result.success(outputData);
+    }
+
+    private String obtenerImagenBD(String nomUsuario) {
+        // Metodo para obtener la imagen del perfil del usuario desde la base de datos remota y convertirla en una cadena Base64
+
+        // Construir la URL: IP + PUERTO para el PHP de login
+        String direccion = "http://35.230.19.155:81/imagenes.php";
+        String parametros = "nombre="+nomUsuario;
+
+        HttpURLConnection urlConnection = null;
+        BufferedReader reader = null;
+        StringBuilder response = new StringBuilder();
+
+        try {
+            URL destino = new URL(direccion);
+            urlConnection = (HttpURLConnection) destino.openConnection();
+            urlConnection.setConnectTimeout(5000);
+            urlConnection.setReadTimeout(5000);
+
+            urlConnection.setRequestMethod("POST");
+            urlConnection.setDoOutput(true);
+            urlConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+
+            //Añadir parametros a la URI
+            PrintWriter out = new PrintWriter(urlConnection.getOutputStream());
+            out.print(parametros);
+            out.close();
+            int statusCode = urlConnection.getResponseCode();
+            Log.d("IMAGEN", "Codigo de estado: " + String.valueOf(statusCode));
+
+            if(statusCode == 200){
+                // Leer el flujo de entrada de la conexión
+                InputStream inputStream = urlConnection.getInputStream();
+                reader = new BufferedReader(new InputStreamReader(inputStream));
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    response.append(line);
+                }
+
+                // Convertir la respuesta a una cadena Base64
+                String imagenBase64 = response.toString();
+                Log.d("IMAGEN", imagenBase64);
+                return imagenBase64;
+
+            }else{
+                return "";
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+            Log.d("IMAGEN","EXCEPCION");
+            return ""; // Devuelve VACIO en caso de error
+        }
+    }
+
+
+    private Result subirImagenPerfilBD(String nomUsu, String imgBitMap) {
+        // Construir la URL: IP + PUERTO para el PHP de login
+        String direccion = "http://35.230.19.155:81/imagenes.php"; //cambiar php
+        String parametros = "nombre="+nomUsu+"&imagen="+imgBitMap;
+
+
+
 
     }
 

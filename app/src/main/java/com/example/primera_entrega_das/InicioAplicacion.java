@@ -71,7 +71,7 @@ public class InicioAplicacion extends AppCompatActivity{
                     .observe(this, new Observer<WorkInfo>() {
                         @Override
                         public void onChanged(WorkInfo workInfo) {
-                            if(workInfo != null && workInfo.getState().isFinished()){
+                            if(workInfo != null && workInfo.getState() == WorkInfo.State.SUCCEEDED){
                                 Log.d("LOGIN", "despues del workmanager");
                                 // Iniciar la actividad principal (MainActivity) si el result es success
                                 Intent main = new Intent(InicioAplicacion.this, MainActivity.class);
