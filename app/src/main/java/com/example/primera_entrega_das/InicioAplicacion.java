@@ -4,12 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.Observer;
+import androidx.preference.PreferenceManager;
 import androidx.work.Data;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -73,7 +75,14 @@ public class InicioAplicacion extends AppCompatActivity{
                         public void onChanged(WorkInfo workInfo) {
                             if(workInfo != null && workInfo.getState() == WorkInfo.State.SUCCEEDED){
                                 Log.d("LOGIN", "despues del workmanager");
-                                // Iniciar la actividad principal (MainActivity) si el result es success
+
+                                //Guardar en preferences el nombre de usuario que ha iniciado sesión.
+                                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                                SharedPreferences.Editor editor = preferences.edit();
+                                editor.putString("nombreUsu", nombre);
+                                editor.apply();
+
+                                // Iniciar la actividad principal (MainActivity) si el result es success.
                                 Intent main = new Intent(InicioAplicacion.this, MainActivity.class);
                                 main.putExtra("nombreUsu", nombre); // Se pasa el nombre de usuario
                                 startActivity(main);

@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
+import androidx.preference.PreferenceManager;
 import androidx.work.Data;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkInfo;
@@ -14,6 +15,7 @@ import androidx.work.WorkManager;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -63,11 +65,15 @@ public class PerfilUsuario extends AppCompatActivity {
         imgPerfil = findViewById(R.id.imagePerfil);
 
         //Traer por medio del intent, el nombre de usuario y sus puntos
-        Bundle extras = getIntent().getExtras();
-        if(extras != null){
-            nomUsuario = extras.getString("nombreUsu");
-            tvNombre.setText("Nombre: " + nomUsuario);
-        }
+        //Bundle extras = getIntent().getExtras();
+        //if(extras != null){
+        //     nomUsuario = extras.getString("nombreUsu");
+        //    tvNombre.setText("Nombre: " + nomUsuario);
+        //}
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        nomUsuario = preferences.getString("nombreUsu", "");
+        tvNombre.setText("Nombre: " + nomUsuario);
 
         //cargar la foto (si tiene el usuario)
         obtenerImagenPerfil();
