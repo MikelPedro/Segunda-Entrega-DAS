@@ -48,6 +48,9 @@ public class conexionBDRemota extends Worker {
         }else if(reg.equals("obtener")){
             Log.d("IMAGEN", "entra en cargar imagen");
             return obtenerImagenPerfil(nomUsu);
+        }else if(reg.equals("subirtoken")){
+            String token = getInputData().getString("token");
+            return subirToken(nomUsu,token);
         }else{
             return login(nomUsu,contraseña);
         }
@@ -233,6 +236,45 @@ public class conexionBDRemota extends Worker {
         } catch (Exception e) {
             e.printStackTrace();
             Log.d("IMAGEN", "EXCEPCION");
+            return Result.failure();
+        }
+
+    }
+
+    private Result subirToken(String nomUsu, String token) {
+        // Construir la URL: IP + PUERTO para el PHP de login
+        String direccion = "http://35.230.19.155:81/insertartoken.php?";
+
+        HttpURLConnection urlConnection = null;
+
+        try {
+            //Construir URI con los parametros
+            Uri.Builder builder = new Uri.Builder()
+                    .appendQueryParameter("nombreUsuario", nomUsu)
+                    .appendQueryParameter("token", token);
+            String parametrosURL = builder.build().getEncodedQuery();
+
+            URL destino = new URL(direccion + parametrosURL);
+            Log.d("TOKEN_BD", "URI: " + destino);
+            urlConnection = (HttpURLConnection) destino.openConnection();
+            urlConnection.setConnectTimeout(5000);
+            urlConnection.setReadTimeout(5000);
+
+            urlConnection.setRequestMethod("POST");
+            urlConnection.setDoOutput(true);
+            urlConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+
+            int statusCode = urlConnection.getResponseCode();
+            Log.d("TOKEN_BD", "Codigo de estado del subir: " + String.valueOf(statusCode));
+            if(statusCode == 200){
+                return Result.success();
+            }else{
+                return Result.failure();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d("TOKEN_BD", "EXCEPCION");
             return Result.failure();
         }
 

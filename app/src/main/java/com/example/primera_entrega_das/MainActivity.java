@@ -36,25 +36,6 @@ public class MainActivity extends AppCompatActivity{
         // Llamada al método cargarPreguntasEnBD para cargar todas las preguntas de un archivo en la BD
         bd.cargarPreguntasEnBD(this);
 
-        FirebaseMessaging.getInstance().getToken()
-                .addOnCompleteListener(new OnCompleteListener<String>() {
-                    @Override
-                    public void onComplete(@NonNull Task<String> task) {
-                        if (!task.isSuccessful()) {
-                            Log.w(TAG, "Fetching FCM registration token failed", task.getException());
-                            return;
-                        }
-
-                        // Get new FCM registration token
-                        String token = task.getResult();
-
-                        // Log and toast
-                        //String msg = getString(R.string.msg_token_fmt, token);
-                        Log.d(TAG, token);
-                        Toast.makeText(MainActivity.this, " Tu token es: " + token, Toast.LENGTH_SHORT).show();
-                    }
-                });
-
     }
 
     @Override
@@ -99,13 +80,18 @@ public class MainActivity extends AppCompatActivity{
         dialogo.show(getSupportFragmentManager(), "dialogoIcono");
     }
 
+    public void OnClickIconoMensaje(MenuItem item){
+        //Mostrar dialogo con 2 opciones (ver enlace y volver)
+        DialogFragment dialogo = new DialogoFB();
+        dialogo.show(getSupportFragmentManager(), "dialogofb");
+    }
+
     public void OnClickIconoPerfil(MenuItem item){
         //Al darle click te lleva a la pagina del perfil del usuario
         Intent perfil = new Intent(this,PerfilUsuario.class);
         perfil.putExtra("nombreUsu",nombreUsu);
         this.startActivity(perfil);
     }
-
 
     //lo de login (quitar mas adelante)
     public void OnClickPruebas(View v){

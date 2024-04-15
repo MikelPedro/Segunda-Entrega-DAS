@@ -11,9 +11,15 @@
         android:onClick="OnClickIconoPregunta"
         android:title=""
         app:showAsAction="ifRoom|withText" />
-
     <item
         android:id="@+id/opcion2"
+        android:icon="@drawable/baseline_message_24"
+        android:onClick="OnClickIconoMensaje"
+        android:title=""
+        app:showAsAction="ifRoom|withText" />
+
+    <item
+        android:id="@+id/opcion3"
         android:icon="@drawable/baseline_person_24"
         android:onClick="OnClickIconoPerfil"
         android:title=""

@@ -1,5 +1,8 @@
 package com.example.primera_entrega_das;
 
+import static android.content.ContentValues.TAG;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
@@ -20,10 +23,14 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 
 public class InicioAplicacion extends AppCompatActivity{
 
+    private String token = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,6 +88,34 @@ public class InicioAplicacion extends AppCompatActivity{
                                 SharedPreferences.Editor editor = preferences.edit();
                                 editor.putString("nombreUsu", nombre);
                                 editor.apply();
+
+                                //Obtener token y subir a bd remota
+                                FirebaseMessaging.getInstance().getToken()
+                                        .addOnCompleteListener(new OnCompleteListener<String>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<String> task) {
+                                                if (!task.isSuccessful()) {
+                                                    Log.w("TOKEN", "Fetching FCM registration token failed", task.getException());
+                                                    return;
+                                                }
+                                                // Get new FCM registration token
+                                                token = task.getResult();
+                                                Log.d("TOKEN", token);
+
+                                                Log.d("TOKEN", "despues del firebase"+token);
+                                                Data datosToken = new Data.Builder()
+                                                        .putString("nom",nombre)
+                                                        .putString("token",token)
+                                                        .putString("reg","subirtoken")
+                                                        .build();
+
+                                                OneTimeWorkRequest otwr2 = new OneTimeWorkRequest.Builder(conexionBDRemota.class)
+                                                        .setInputData(datosToken)
+                                                        .build();
+
+                                                WorkManager.getInstance(InicioAplicacion.this).enqueue(otwr2);
+                                            }
+                                        });
 
                                 // Iniciar la actividad principal (MainActivity) si el result es success.
                                 Intent main = new Intent(InicioAplicacion.this, MainActivity.class);
