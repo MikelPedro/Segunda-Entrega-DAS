@@ -1,13 +1,23 @@
 package com.example.primera_entrega_das;
 
+import static android.content.ContentValues.TAG;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
+
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class MainActivity extends AppCompatActivity{
 
@@ -26,13 +36,24 @@ public class MainActivity extends AppCompatActivity{
         // Llamada al método cargarPreguntasEnBD para cargar todas las preguntas de un archivo en la BD
         bd.cargarPreguntasEnBD(this);
 
-        Bundle extras = getIntent().getExtras();
-        //el if es temporal hasta que solo aparezca la pantalla de login como principal
-        if(extras !=null){
-            nombreUsu = extras.getString("nombreUsu");
-        }else{
-            nombreUsu="";
-        }
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w(TAG, "Fetching FCM registration token failed", task.getException());
+                            return;
+                        }
+
+                        // Get new FCM registration token
+                        String token = task.getResult();
+
+                        // Log and toast
+                        //String msg = getString(R.string.msg_token_fmt, token);
+                        Log.d(TAG, token);
+                        Toast.makeText(MainActivity.this, " Tu token es: " + token, Toast.LENGTH_SHORT).show();
+                    }
+                });
 
     }
 
@@ -85,6 +106,8 @@ public class MainActivity extends AppCompatActivity{
         this.startActivity(perfil);
     }
 
+
+    //lo de login (quitar mas adelante)
     public void OnClickPruebas(View v){
         Intent i = new Intent(this,InicioAplicacion.class);
         this.startActivity(i);

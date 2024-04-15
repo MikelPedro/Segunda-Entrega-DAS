@@ -5,6 +5,8 @@
 
     <item
         android:id="@+id/opcion1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:icon="@drawable/ic_instrucciones"
         android:onClick="OnClickIconoPregunta"
         android:title=""
@@ -16,5 +18,7 @@
         android:onClick="OnClickIconoPerfil"
         android:title=""
         app:showAsAction="ifRoom|withText" />
+
+
 
 </menu>

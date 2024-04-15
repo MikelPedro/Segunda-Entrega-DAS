@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "544534747728",
+    "project_id": "segunda-entrega-das",
+    "storage_bucket": "segunda-entrega-das.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:544534747728:android:a8c9e01ac8701fd5e88f55",
+        "android_client_info": {
+          "package_name": "com.example.primera_entrega_das"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD2sA-0DD_PaP6CnAgqzT2ygBTSbVejLug"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

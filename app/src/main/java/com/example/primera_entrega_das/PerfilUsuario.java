@@ -37,7 +37,10 @@ public class PerfilUsuario extends AppCompatActivity {
     private static final int REQUEST_CAMERA_PERMISSION = 10;
     private String nomUsuario = "";
     private ImageView imgPerfil;
+    private TextView tvNombre;
     private Bitmap laminiatura;
+
+
 
     private ActivityResultLauncher<Intent> takePictureLauncher =
             registerForActivityResult(new
@@ -61,7 +64,7 @@ public class PerfilUsuario extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_perfil_usuario);
 
-        TextView tvNombre = findViewById(R.id.textViewNombre);
+        tvNombre = findViewById(R.id.textViewNombre);
         imgPerfil = findViewById(R.id.imagePerfil);
 
         //Traer por medio del intent, el nombre de usuario y sus puntos
@@ -70,15 +73,17 @@ public class PerfilUsuario extends AppCompatActivity {
         //     nomUsuario = extras.getString("nombreUsu");
         //    tvNombre.setText("Nombre: " + nomUsuario);
         //}
-
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        nomUsuario = preferences.getString("nombreUsu", "");
-        tvNombre.setText("Nombre: " + nomUsuario);
-
+        //Obtener de las preferencias el nombre de usuario que ha iniciado sesion
+        obtenerInsertarDatosUsuario();
         //cargar la foto (si tiene el usuario)
         obtenerImagenPerfil();
 
+    }
 
+    public void obtenerInsertarDatosUsuario(){
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        nomUsuario = preferences.getString("nombreUsu", "");
+        tvNombre.setText("Nombre: " + nomUsuario);
     }
 
     public void OnClickAbrirCamara(View v){
@@ -116,7 +121,7 @@ public class PerfilUsuario extends AppCompatActivity {
             Data datosSubir = new Data.Builder()
                     .putString("nom",nomUsuario)
                     .putString("imagen", foto64)
-                    .putString("reg","subir")
+                    .putString("reg","subir") //accion que se va a realizar
                     .build();
 
             OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDRemota.class)
@@ -140,7 +145,7 @@ public class PerfilUsuario extends AppCompatActivity {
                 .putString("reg","obtener")
                 .build();
 
-        Log.d("IMAGEN", "Construye el DATA en obtener imagen perfil");
+        //Log.d("IMAGEN", "Construye el DATA en obtener imagen perfil");
         OneTimeWorkRequest otwr1 = new OneTimeWorkRequest.Builder(conexionBDRemota.class)
                 .setInputData(datosObtener)
                 .build();
