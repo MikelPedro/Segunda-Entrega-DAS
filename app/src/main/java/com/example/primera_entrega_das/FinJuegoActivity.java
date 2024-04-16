@@ -28,9 +28,7 @@ public class FinJuegoActivity extends AppCompatActivity {
     private final int notificacion_id = 0;
     private int contPA,contPM = 0;
 
-
     //Parte necesaria para fragments (horizontal y vertical)
-
     public static class HorizontalFragment extends Fragment {
 
         public HorizontalFragment() {
@@ -162,4 +160,5 @@ public class FinJuegoActivity extends AppCompatActivity {
         notificacionman.notify(notificacion_id, builder.build());
 
     }
+
 }

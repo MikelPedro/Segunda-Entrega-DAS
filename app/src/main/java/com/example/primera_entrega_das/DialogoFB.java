@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,17 +26,18 @@ public class DialogoFB extends DialogFragment {
         super.onCreateDialog(savedInstanceState);
         //se añade en el builder el tema para el dialogo
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
-        builder.setTitle("Enviar mensaje a otro Usuario");
-        builder.setMessage("Si quieres puedes avisar a otro usuario para que juegue hoy!");
+        builder.setTitle("Enviar mensaje");
+        builder.setMessage("Puedes avisar a otro usuario para que juegue hoy! " +
+                "o incluso a todos los usuarios dando click a Enviar a Todos");
 
         // Crear un EditText para que el usuario ingrese el nombre del destinatario
         final EditText nombreUsuarioEditText = new EditText(getActivity());
         nombreUsuarioEditText.setHint("Nombre del usuario");
 
-        // Añadir el EditText al layout del dialogo
+        // Añadir el EditText al layout del diálogo
         builder.setView(nombreUsuarioEditText);
 
-        //Opcion que se muestra en el dialogo
+        //Opcion que se muestra en el dialogo, para enviar mensjae a un usuario
         builder.setPositiveButton("Enviar", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -59,9 +61,25 @@ public class DialogoFB extends DialogFragment {
                             .setInputData(datos)
                             .build();
 
-                    WorkManager.getInstance(getContext().getApplicationContext()).enqueue(otwr); //no se si esta bien eso para sacar contexto
+                    WorkManager.getInstance(getContext().getApplicationContext()).enqueue(otwr);
                 }
 
+            }
+        });
+        builder.setNeutralButton("Enviar a Todos", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                // Para enviar a todos los usuarios una notificacion
+                Data datos = new Data.Builder()
+                        .putString("reg","mensajetodos")
+                        .build();
+
+                //One time work, llama al dowork que esta en la clase de la conexion con la BD remota
+                OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDRemota.class)
+                        .setInputData(datos)
+                        .build();
+
+                WorkManager.getInstance(getContext().getApplicationContext()).enqueue(otwr);
             }
         });
         builder.setNegativeButton("Volver", new DialogInterface.OnClickListener() {
