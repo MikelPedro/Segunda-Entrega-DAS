@@ -5,14 +5,19 @@ import static android.content.ContentValues.TAG;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.Manifest;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -36,6 +41,14 @@ public class MainActivity extends AppCompatActivity{
         // Llamada al método cargarPreguntasEnBD para cargar todas las preguntas de un archivo en la BD
         bd.cargarPreguntasEnBD(this);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)!=
+                    PackageManager.PERMISSION_GRANTED) {
+                //PEDIR EL PERMISO
+                ActivityCompat.requestPermissions(this, new
+                        String[]{Manifest.permission.POST_NOTIFICATIONS}, 11);
+            }
+        }
     }
 
     @Override
