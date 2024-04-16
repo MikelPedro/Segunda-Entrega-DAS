@@ -13,6 +13,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.preference.PreferenceManager;
+import androidx.work.Data;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 
 public class DialogoFB extends DialogFragment {
     private String nomUsuario,nomEnviar="";
@@ -46,7 +49,17 @@ public class DialogoFB extends DialogFragment {
                 nomEnviar = nombreUsuarioEditText.getText().toString().trim();
                 Log.d("USUARIO","nom a enviar " + nomEnviar);
                 if (!nomEnviar.equals("")){
-                    enviarMensajeAlUsuario(nomEnviar);
+                    Data datos = new Data.Builder()
+                            .putString("nom",nomEnviar)
+                            .putString("reg","mensaje")
+                            .build();
+
+                    //One time work, llama al dowork que esta en la clase de la conexion con la BD remota
+                    OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDRemota.class)
+                            .setInputData(datos)
+                            .build();
+
+                    WorkManager.getInstance(getContext().getApplicationContext()).enqueue(otwr); //no se si esta bien eso para sacar contexto
                 }
 
             }
@@ -58,12 +71,6 @@ public class DialogoFB extends DialogFragment {
             }
         });
         return builder.create();
-    }
-
-
-    private void enviarMensajeAlUsuario(String nombreUsuario) {
-        // Aquí puedes implementar la lógica para enviar el mensaje al usuario.
-
     }
 
 }

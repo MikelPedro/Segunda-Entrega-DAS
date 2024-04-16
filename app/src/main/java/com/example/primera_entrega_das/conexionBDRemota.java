@@ -52,6 +52,7 @@ public class conexionBDRemota extends Worker {
             String token = getInputData().getString("token");
             return subirToken(nomUsu,token);
         }else if(reg.equals("mensaje")){
+            Log.d("TOKEN_MEN", "llega al doWork");
             return mandarMensajeFB(nomUsu);
         }else{
             return login(nomUsu,contraseña);
@@ -297,7 +298,7 @@ public class conexionBDRemota extends Worker {
             String parametrosURL = builder.build().getEncodedQuery();
 
             URL destino = new URL(direccion + parametrosURL);
-            Log.d("TOKEN_BD", "URI: " + destino);
+            Log.d("TOKEN_MEN", "URI: " + destino);
             urlConnection = (HttpURLConnection) destino.openConnection();
             urlConnection.setConnectTimeout(5000);
             urlConnection.setReadTimeout(5000);
@@ -307,7 +308,7 @@ public class conexionBDRemota extends Worker {
             urlConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
 
             int statusCode = urlConnection.getResponseCode();
-            Log.d("TOKEN_BD", "Codigo de estado del subir: " + String.valueOf(statusCode));
+            Log.d("TOKEN_MEN", "Codigo de estado del subir: " + String.valueOf(statusCode));
             if(statusCode == 200){
                 return Result.success();
             }else{
@@ -316,7 +317,7 @@ public class conexionBDRemota extends Worker {
 
         } catch (Exception e) {
             e.printStackTrace();
-            Log.d("MANDAR_MENSAJE", "EXCEPCION");
+            Log.d("TOKEN_MEN", "EXCEPCION");
             return Result.failure();
         }
 
