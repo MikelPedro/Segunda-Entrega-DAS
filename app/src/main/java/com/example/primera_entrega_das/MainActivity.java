@@ -106,9 +106,4 @@ public class MainActivity extends AppCompatActivity{
         this.startActivity(perfil);
     }
 
-    //lo de login (quitar mas adelante)
-    public void OnClickPruebas(View v){
-        Intent i = new Intent(this,InicioAplicacion.class);
-        this.startActivity(i);
-    }
 }

@@ -29,7 +29,7 @@ INSERT INTO CUESTIONARIO(Pregunta, Tema, Respuesta1, Respuesta2, Respuesta3, Cor
 INSERT INTO CUESTIONARIO(Pregunta, Tema, Respuesta1, Respuesta2, Respuesta3, Correcta) VALUES('¿Cuál es el país que ha ganado más Copas Mundiales de la FIFA?', 'Deporte', 'Brasil', 'Alemania', 'Argentina', 'Brasil');
 INSERT INTO CUESTIONARIO(Pregunta, Tema, Respuesta1, Respuesta2, Respuesta3, Correcta) VALUES('¿Quién es considerado uno de los mejores jugadores de baloncesto de todos los tiempos y apodado "Air Jordan"?', 'Deporte', 'LeBron James', 'Kobe Bryant', 'Michael Jordan', 'Michael Jordan');
 INSERT INTO CUESTIONARIO(Pregunta, Tema, Respuesta1, Respuesta2, Respuesta3, Correcta) VALUES('¿En qué océano se encuentra la Gran Barrera de Coral?','Geografia','Océano Atlántico','Océano Índico','Océano Pacífico','Océano Pacífico');
-INSERT INTO CUESTIONARIO(Pregunta, Tema, Respuesta1, Respuesta2, Respuesta3, Correcta) VALUES('¿?','Geografia','Océano Atlántico','Océano Índico','Océano Pacífico','Océano Pacífico');
+INSERT INTO CUESTIONARIO(Pregunta, Tema, Respuesta1, Respuesta2, Respuesta3, Correcta) VALUES('¿En qué océano se encuentra la isla de Santa Helena?','Geografia','Océano Atlántico','Océano Índico','Océano Artico','Océano Atlántico');
 INSERT INTO CUESTIONARIO(Pregunta, Tema, Respuesta1, Respuesta2, Respuesta3, Correcta) VALUES('¿Quién es el arquitecto conocido por su estilo modernista y su obra maestra "La Sagrada Familia"?', 'Arte', 'Antoni Gaudi', 'Santiago Calatrava', 'Frank Gehry', 'Antoni Gaudi');
 INSERT INTO CUESTIONARIO(Pregunta, Tema, Respuesta1, Respuesta2, Respuesta3, Correcta) VALUES('¿Cuál es la capital de Nicaragua?', 'Geografia', 'Tegucigalpa', 'Managua', 'San Jose', 'Managua');
 

@@ -67,12 +67,6 @@ public class PerfilUsuario extends AppCompatActivity {
         tvNombre = findViewById(R.id.textViewNombre);
         imgPerfil = findViewById(R.id.imagePerfil);
 
-        //Traer por medio del intent, el nombre de usuario y sus puntos
-        //Bundle extras = getIntent().getExtras();
-        //if(extras != null){
-        //     nomUsuario = extras.getString("nombreUsu");
-        //    tvNombre.setText("Nombre: " + nomUsuario);
-        //}
         //Obtener de las preferencias el nombre de usuario que ha iniciado sesion
         obtenerInsertarDatosUsuario();
         //cargar la foto (si tiene el usuario)
@@ -167,7 +161,7 @@ public class PerfilUsuario extends AppCompatActivity {
                             }
                         }else {
                             Log.d("IMAGEN", "No se ha cargado la imagen");
-                            Toast.makeText(PerfilUsuario.this,"No se ha cargado imagen", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(PerfilUsuario.this,"No se ha cargado imagen", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });

@@ -37,6 +37,7 @@ public class ServicioFirebase extends FirebaseMessagingService {
             NotificationCompat.Builder elBuilder = new NotificationCompat.Builder(getApplicationContext(), "IdCanal");
 
             //Crear canal de notificaciones
+            //Crear canal de notificaciones
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 NotificationChannel elCanal = new NotificationChannel("IdCanal", "channelName", NotificationManager.IMPORTANCE_DEFAULT);
                 //Configuración del canal

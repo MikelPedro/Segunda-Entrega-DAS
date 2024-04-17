@@ -14,7 +14,6 @@ import java.net.URL;
 
 public class conexionBDRemota extends Worker {
 
-
     public conexionBDRemota(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
     }
@@ -47,7 +46,6 @@ public class conexionBDRemota extends Worker {
         }else{
             return login(nomUsu,contraseña);
         }
-
     }
 
     public Result login(String nomUsu, String contraseña) {
@@ -121,7 +119,6 @@ public class conexionBDRemota extends Worker {
             Log.d("REGISTRO","EXCEPCION");
             return Result.failure(); // Devuelve null en caso de error
         }
-
     }
 
     private Result obtenerImagenPerfil(String nomUsuario) {
@@ -189,7 +186,6 @@ public class conexionBDRemota extends Worker {
         }
         return null;
     }
-
 
     private Result subirImagenPerfilBD(String nomUsu, String foto64) {
         // Construir la URL: IP + PUERTO para el PHP de login
@@ -270,7 +266,6 @@ public class conexionBDRemota extends Worker {
 
     }
 
-
     private Result mandarMensajeFB(String nomUsu) {
         // Construir la URL: IP + PUERTO para el PHP de login
         String direccion = "http://35.230.19.155:81/mandarmensaje.php?";
@@ -281,7 +276,6 @@ public class conexionBDRemota extends Worker {
             Uri.Builder builder = new Uri.Builder()
                     .appendQueryParameter("nombreUsuario", nomUsu);
             String parametrosURL = builder.build().getEncodedQuery();
-
 
             URL destino = new URL(direccion + parametrosURL);
             Log.d("TOKEN_MEN", "URI: " + destino);
