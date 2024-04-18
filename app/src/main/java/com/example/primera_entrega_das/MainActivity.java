@@ -106,4 +106,9 @@ public class MainActivity extends AppCompatActivity{
         this.startActivity(perfil);
     }
 
+    public void OnClickMapas(View v){
+        Intent mapas = new Intent(this,MapsJuegoActivity.class);
+        this.startActivity(mapas);
+    }
+
 }

@@ -19,6 +19,7 @@
         <item>Capitales, ríos y más</item>
         <item>Fundamentos, eventos y conocimiento</item>
     </string-array>
+    <string name="title_activity_maps_juego">MapsJuegoActivity</string>
 
 
 </resources>
