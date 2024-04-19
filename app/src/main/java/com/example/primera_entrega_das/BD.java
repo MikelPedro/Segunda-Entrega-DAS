@@ -3,6 +3,8 @@ package com.example.primera_entrega_das;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
 import androidx.annotation.Nullable;
 
 public class BD extends SQLiteOpenHelper {
@@ -27,12 +29,15 @@ public class BD extends SQLiteOpenHelper {
                 "Respuesta3 TEXT NOT NULL, " +
                 "Correcta TEXT NOT NULL)" );
 
+        Log.d("BD", "Tablas creadas correctamente");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Es un metodo relacionado con mejoras necesarias en la BD.
         // y manejar la actualización de la BD cuando hay un cambio en la estructura de la misma.
+        Log.d("BD", "Se está actualizando la base de datos de la versión " + oldVersion + " a la versión " + newVersion);
     }
+
 
 }

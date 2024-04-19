@@ -142,23 +142,25 @@ public class OperacionesBD extends BD{
         return new ModeloPregunta(id,preg,r1,r2,r3,correcta);
     }
 
+
     // Metodo para leer y ejecutar las sentencias INSERT desde el archivo .sql guardado en la carpeta raw
     public void cargarPreguntasEnBD(Context context) {
         SQLiteDatabase db = getWritableDatabase();
         try {
             if (context != null) {
-                InputStream inputStream = context.getResources().openRawResource(R.raw.preguntas);
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+                InputStream preguntasinputStream = context.getResources().openRawResource(R.raw.preguntas);
+                BufferedReader preguntasbufferedReader = new BufferedReader(new InputStreamReader(preguntasinputStream));
 
                 String line;
-                while ((line = bufferedReader.readLine()) != null) {
+                while ((line = preguntasbufferedReader.readLine()) != null) {
                     // Ejecutar cada sentencia INSERT
                     db.execSQL(line);
                     Log.d("BD", "Sentencia SQL: " + line);
                 }
 
-                bufferedReader.close();
-                inputStream.close();
+                preguntasbufferedReader.close();
+                preguntasinputStream.close();
+
             } else {
                 Log.d("BD", "Context es nulo");
             }

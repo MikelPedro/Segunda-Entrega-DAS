@@ -108,7 +108,18 @@ public class MainActivity extends AppCompatActivity{
 
     public void OnClickMapas(View v){
         Intent mapas = new Intent(this,MapsJuegoActivity.class);
+
+        OperacionesBD opBD = new OperacionesBD(this,1);
+
+        int idP = opBD.obtenerMapaRandom(); //para obtener preguntas
+        //se devuelve el id de una pregunta random
+        //se guarda en el intent los parametros necesarios
+        mapas.putExtra("idPregunta",idP);
+        mapas.putExtra("pregCorrecta",0);
+        mapas.putExtra("pregRespondida",0);
         this.startActivity(mapas);
+        //si le das al triangulo te saca de la aplicación
+        finish();
     }
 
 }

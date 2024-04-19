@@ -156,7 +156,7 @@ public class PerfilUsuario extends AppCompatActivity {
                                 // Si se cargó la imagen desde la base de datos, establecerla en el ImageView
                                 imgPerfil.setImageBitmap(imagenPerfil);
                             } else {
-                                // Si no se cargó la imagen desde la base de datos, establecer la imagen predeterminada
+                                // Si no se ha cargado o no existe la imagen en la base de datos, establecer la imagen predeterminada
                                 imgPerfil.setImageResource(R.drawable.baseline_person_24_red);
                             }
                         }else {
