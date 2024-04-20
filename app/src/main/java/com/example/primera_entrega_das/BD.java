@@ -14,7 +14,7 @@ public class BD extends SQLiteOpenHelper {
     private final Context context;
     //Constructor de la BD
     public BD(@Nullable Context context, int version) {
-        super(context, BD_NOMBRE, null, version);
+        super(context, BD_NOMBRE, null, 2);
         this.context = context;
     }
 

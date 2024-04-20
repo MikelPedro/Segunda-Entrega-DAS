@@ -1,0 +1,10 @@
+INSERT INTO MAPAS (Lat, Longi, Respuesta1, Respuesta2, Respuesta3, Correcta) VALUES(19.4326, -99.1332, 'Paris', 'Nueva York', 'Ciudad de Mexico', 'Ciudad de Mexico');
+INSERT INTO MAPAS (Lat, Longi, Respuesta1, Respuesta2, Respuesta3, Correcta) VALUES (48.8566, 2.3522, 'Nueva York', 'Londres', 'Tokio', 'Paris');
+INSERT INTO MAPAS (Lat, Longi, Respuesta1, Respuesta2, Respuesta3, Correcta) VALUES (40.7128, -74.0060, 'Londres', 'Tokio', 'Madrid', 'Nueva York');
+INSERT INTO MAPAS (Lat, Longi, Respuesta1, Respuesta2, Respuesta3, Correcta) VALUES (51.5074, -0.1278, 'Tokio', 'Madrid', 'Roma', 'Londres');
+INSERT INTO MAPAS (Lat, Longi, Respuesta1, Respuesta2, Respuesta3, Correcta) VALUES (35.6895, 139.6917, 'Madrid', 'Roma', 'Berlin', 'Tokio');
+INSERT INTO MAPAS (Lat, Longi, Respuesta1, Respuesta2, Respuesta3, Correcta) VALUES (41.9028, 12.4964, 'Roma', 'Berlin', 'Pekín', 'Madrid');
+INSERT INTO MAPAS (Lat, Longi, Respuesta1, Respuesta2, Respuesta3, Correcta) VALUES (52.5200, 13.4050, 'Berlin', 'Pekín', 'Sídney', 'Roma');
+INSERT INTO MAPAS (Lat, Longi, Respuesta1, Respuesta2, Respuesta3, Correcta) VALUES (39.9042, 116.4074, 'Pekín', 'Sídney', 'Estambul', 'Berlin');
+INSERT INTO MAPAS (Lat, Longi, Respuesta1, Respuesta2, Respuesta3, Correcta) VALUES (-33.8688, 151.2093, 'Sídney', 'Estambul', 'El Cairo', 'Pekín');
+INSERT INTO MAPAS (Lat, Longi, Respuesta1, Respuesta2, Respuesta3, Correcta) VALUES (41.0082, 28.9784, 'Estambul', 'El Cairo', 'Sao Paulo', 'Sídney');

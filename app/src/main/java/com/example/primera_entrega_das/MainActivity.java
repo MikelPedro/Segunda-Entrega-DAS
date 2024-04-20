@@ -4,6 +4,8 @@ import static android.content.ContentValues.TAG;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -19,10 +21,32 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.LiveData;
+import androidx.work.Configuration;
+import androidx.work.Data;
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.ExistingWorkPolicy;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.Operation;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkContinuation;
+import androidx.work.WorkInfo;
+import androidx.work.WorkManager;
+import androidx.work.WorkQuery;
+import androidx.work.WorkRequest;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.common.util.concurrent.ListenableFuture;
 import com.google.firebase.messaging.FirebaseMessaging;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.List;
+import java.util.UUID;
+
+import kotlinx.coroutines.flow.Flow;
 
 public class MainActivity extends AppCompatActivity{
 
@@ -38,7 +62,9 @@ public class MainActivity extends AppCompatActivity{
         setSupportActionBar(toolbar);
 
         OperacionesBD bd = new OperacionesBD(this, 1);
+        OperacionesBDMapas bdm = new OperacionesBDMapas(this, 1);
         // Llamada al método cargarPreguntasEnBD para cargar todas las preguntas de un archivo en la BD
+        bdm.cargarPreguntasEnBDMapas(this);
         bd.cargarPreguntasEnBD(this);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -107,19 +133,22 @@ public class MainActivity extends AppCompatActivity{
     }
 
     public void OnClickMapas(View v){
-        Intent mapas = new Intent(this,MapsJuegoActivity.class);
 
-        OperacionesBD opBD = new OperacionesBD(this,1);
+        Log.d("MAIN","ENTRA");
+        OperacionesBDMapas opBDMap = new OperacionesBDMapas(this,1);
 
-        int idP = opBD.obtenerMapaRandom(); //para obtener preguntas
-        //se devuelve el id de una pregunta random
-        //se guarda en el intent los parametros necesarios
-        mapas.putExtra("idPregunta",idP);
-        mapas.putExtra("pregCorrecta",0);
-        mapas.putExtra("pregRespondida",0);
+        Intent mapas = new Intent(this, MapsJuegoActivity.class);
+        Log.d("MAIN", String.valueOf(opBDMap.obtenerPregRandom()));
+        mapas.putExtra("idPregunta", opBDMap.obtenerPregRandom());
+        mapas.putExtra("pregCorrecta", 0);
+        mapas.putExtra("pregRespondida", 0);
         this.startActivity(mapas);
-        //si le das al triangulo te saca de la aplicación
         finish();
+
+
+
+
+
     }
 
 }

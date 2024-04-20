@@ -1,6 +1,9 @@
 package com.example.primera_entrega_das;
 
 import androidx.fragment.app.FragmentActivity;
+import androidx.work.Data;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +12,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -19,7 +26,11 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.example.primera_entrega_das.databinding.ActivityMapsJuegoBinding;
 
-import java.util.Map;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.concurrent.atomic.AtomicInteger;
+
 
 public class MapsJuegoActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -56,13 +67,13 @@ public class MapsJuegoActivity extends FragmentActivity implements OnMapReadyCal
         super.getIntent().putExtra("pregCorrecta",super.getIntent().getExtras().getInt("pregCorrecta"));
         super.getIntent().putExtra("pregRespondida",super.getIntent().getExtras().getInt("pregRespondida"));
 
-        //OperacionesBD bd = new OperacionesBD(this, 1);
-
+        OperacionesBDMapas bd = new OperacionesBDMapas(this, 1);
         //obtener un objeto ciudadPregunta en base al id que se obtiene del intent
-        //cPregunta = bd.obtenerMapaPorId(super.getIntent().getExtras().getInt("idPregunta"));
+        cPregunta = bd.obtenerPregPorId(super.getIntent().getExtras().getInt("idPregunta"));
 
         //devolver resultado correcto de la pregunta
-        //respReal = cargarPregunta(cPregunta);
+
+        respReal = cargarPregunta(cPregunta);
 
         // Obtener el mapa asíncronamente
         mapFragment.getMapAsync(this);
@@ -91,12 +102,11 @@ public class MapsJuegoActivity extends FragmentActivity implements OnMapReadyCal
         // Mover la cámara hacia la posición del marcador con animación
         elmapa.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         */
-        OperacionesBD bd = new OperacionesBD(this, 1);
         //obtener un objeto ciudadPregunta en base al id que se obtiene del intent
-        cPregunta = bd.obtenerMapaPorId(super.getIntent().getExtras().getInt("idPregunta"));
-
+        //cPregunta = bd.obtenerMapaPorId(super.getIntent().getExtras().getInt("idPregunta"));
+        //this.obtCiudad(super.getIntent().getExtras().getInt("idPregunta"));
         //devolver resultado correcto de la pregunta
-        respReal = cargarPregunta(cPregunta);
+        //respReal = this.obtCiudad(super.getIntent().getExtras().getInt("idPregunta");
 
     }
 
@@ -104,9 +114,10 @@ public class MapsJuegoActivity extends FragmentActivity implements OnMapReadyCal
         super.onStart();
 
         Bundle extras = getIntent().getExtras();
-        OperacionesBD bd = new OperacionesBD(this, 1);
+        OperacionesBDMapas bd = new OperacionesBDMapas(this, 1);
         //cargar info de la pregunta en el view
-        cargarPregunta(bd.obtenerMapaPorId(extras.getInt("idPregunta")));
+        cargarPregunta(bd.obtenerPregPorId(extras.getInt("idPregunta")));
+
 
         btnSigMap.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,18 +127,18 @@ public class MapsJuegoActivity extends FragmentActivity implements OnMapReadyCal
                 //Comparar la respuesta real con la del usuario
                 if (respReal.equals(respUsu)) {
                     //sumar 1 punto al contador de preguntas correctas
-                    MapsJuegoActivity.super.getIntent().putExtra("pregCorrecta",MapsJuegoActivity.super.getIntent().getExtras().getInt("pregCorrecta")+1);
+                    MapsJuegoActivity.super.getIntent().putExtra("pregCorrecta", MapsJuegoActivity.super.getIntent().getExtras().getInt("pregCorrecta") + 1);
                 }
 
                 //sumar 1 punto al contador de preguntas respondidas
-                MapsJuegoActivity.super.getIntent().putExtra("pregRespondida",MapsJuegoActivity.super.getIntent().getExtras().getInt("pregRespondida")+1);
+                MapsJuegoActivity.super.getIntent().putExtra("pregRespondida", MapsJuegoActivity.super.getIntent().getExtras().getInt("pregRespondida") + 1);
 
                 Log.d("PREGUNTAS RESPONDIDAS", String.valueOf(MapsJuegoActivity.super.getIntent().getExtras().getInt("pregRespondida")));
 
                 if (MapsJuegoActivity.super.getIntent().getExtras().getInt("pregRespondida") == 3) {
 
                     //si es igual a 3 se acaba el juego y se muestra una nueva actividad con el resultado
-                    Intent intent = new Intent(MapsJuegoActivity.this,FinJuegoActivity.class);
+                    Intent intent = new Intent(MapsJuegoActivity.this, FinJuegoActivity.class);
                     //Añadir al intent informacion sobre las preguntas acertadas y respondidas
                     intent.putExtra("pregCorrecta", MapsJuegoActivity.super.getIntent().getExtras().getInt("pregCorrecta"));
                     intent.putExtra("pregRespondida", MapsJuegoActivity.super.getIntent().getExtras().getInt("pregRespondida"));
@@ -137,13 +148,11 @@ public class MapsJuegoActivity extends FragmentActivity implements OnMapReadyCal
 
                     MapsJuegoActivity.super.startActivity(intent);
                     finish(); //finaliza esta actividad
-                }else{
+                } else {
 
-                    //Recargar la actividad si todavia no han aparecido 3 preguntas
+
                     Intent intent = new Intent(MapsJuegoActivity.this, MapsJuegoActivity.class);
-                    //Guardar en el intent toda la informacion necesaria
-                    //Obtener otra pregunta  manera random
-                    intent.putExtra("idPregunta",bd.obtenerMapaRandom());
+                    intent.putExtra("idPregunta", bd.obtenerPregRandom());
                     intent.putExtra("pregCorrecta", MapsJuegoActivity.super.getIntent().getExtras().getInt("pregCorrecta"));
                     intent.putExtra("pregRespondida", MapsJuegoActivity.super.getIntent().getExtras().getInt("pregRespondida"));
 
@@ -153,7 +162,6 @@ public class MapsJuegoActivity extends FragmentActivity implements OnMapReadyCal
 
             }
         });
-
     }
 
 
@@ -181,13 +189,6 @@ public class MapsJuegoActivity extends FragmentActivity implements OnMapReadyCal
         return respReal;
     }
 
-    private double obtenerLatitud(CiudadPregunta pregunta){
-        return pregunta.getLatitud();
-    }
-
-    private double obtenerLongitud(CiudadPregunta pregunta){
-        return pregunta.getLongitud();
-    }
 
     // Método para obtener la respuesta seleccionada de los RadioButtons
     private String obtenerRespuestaSeleccionada(RadioButton radioButtonR1, RadioButton radioButtonR2, RadioButton radioButtonR3) {
@@ -200,4 +201,7 @@ public class MapsJuegoActivity extends FragmentActivity implements OnMapReadyCal
         }
         return "";
     }
+
+
+
 }

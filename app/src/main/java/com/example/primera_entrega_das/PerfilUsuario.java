@@ -18,12 +18,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -118,7 +116,7 @@ public class PerfilUsuario extends AppCompatActivity {
                     .putString("reg","subir") //accion que se va a realizar
                     .build();
 
-            OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDRemota.class)
+            OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(ConexionBDRemota.class)
                     .setInputData(datosSubir)
                     .build();
 
@@ -140,7 +138,7 @@ public class PerfilUsuario extends AppCompatActivity {
                 .build();
 
         //Log.d("IMAGEN", "Construye el DATA en obtener imagen perfil");
-        OneTimeWorkRequest otwr1 = new OneTimeWorkRequest.Builder(conexionBDRemota.class)
+        OneTimeWorkRequest otwr1 = new OneTimeWorkRequest.Builder(ConexionBDRemota.class)
                 .setInputData(datosObtener)
                 .build();
 

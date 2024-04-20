@@ -70,7 +70,7 @@ public class InicioAplicacion extends AppCompatActivity{
                     .putString("reg","no")
                     .build();
 
-            OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDRemota.class)
+            OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(ConexionBDRemota.class)
                     .setInputData(datos)
                     .build();
             Log.d("LOGIN", "llega antes del workmanager" + nombre + " " + contraseña);
@@ -107,7 +107,7 @@ public class InicioAplicacion extends AppCompatActivity{
                                                         .putString("reg","subirtoken")
                                                         .build();
 
-                                                OneTimeWorkRequest otwr2 = new OneTimeWorkRequest.Builder(conexionBDRemota.class)
+                                                OneTimeWorkRequest otwr2 = new OneTimeWorkRequest.Builder(ConexionBDRemota.class)
                                                         .setInputData(datosToken)
                                                         .build();
 

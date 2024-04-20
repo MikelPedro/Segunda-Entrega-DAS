@@ -3,12 +3,10 @@ package com.example.primera_entrega_das;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -57,7 +55,7 @@ public class DialogoFB extends DialogFragment {
                             .build();
 
                     //One time work, llama al dowork que esta en la clase de la conexion con la BD remota
-                    OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDRemota.class)
+                    OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(ConexionBDRemota.class)
                             .setInputData(datos)
                             .build();
 
@@ -75,7 +73,7 @@ public class DialogoFB extends DialogFragment {
                         .build();
 
                 //One time work, llama al dowork que esta en la clase de la conexion con la BD remota
-                OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDRemota.class)
+                OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(ConexionBDRemota.class)
                         .setInputData(datos)
                         .build();
 

@@ -68,7 +68,7 @@ public class RegisterLogin extends AppCompatActivity {
                     .build();
 
             //One time work, llama al dowork que esta en la clase de la conexion con la BD remota
-            OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(conexionBDRemota.class)
+            OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(ConexionBDRemota.class)
                     .setInputData(datos)
                     .build();
 

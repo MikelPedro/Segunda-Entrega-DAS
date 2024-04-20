@@ -12,9 +12,9 @@ import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class conexionBDRemota extends Worker {
+public class ConexionBDRemota extends Worker {
 
-    public conexionBDRemota(@NonNull Context context, @NonNull WorkerParameters workerParams) {
+    public ConexionBDRemota(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
     }
 
