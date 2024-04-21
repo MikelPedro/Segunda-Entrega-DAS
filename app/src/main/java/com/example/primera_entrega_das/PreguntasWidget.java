@@ -39,13 +39,13 @@ public class PreguntasWidget extends AppWidgetProvider {
 
     @Override
     public void onEnabled(Context context) {
-        // Enter relevant functionality for when the first widget is created
+        //Llamar a la clase de la alarma
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, AlarmManagerBroadcastReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        // Establecer la alarma para actualizar el widget cada 10 minutos
-        long intervalMillis = 1 * 60 * 1000; // 10 minutos en milisegundos
+        // Establecer la alarma para actualizar el widget cada 5 minutos
+        long intervalMillis = 5 * 60 * 1000; // 10 minutos en milisegundos
         long triggerAtMillis = System.currentTimeMillis() + intervalMillis;
         alarmManager.setRepeating(AlarmManager.RTC, triggerAtMillis, intervalMillis, pendingIntent);
     }

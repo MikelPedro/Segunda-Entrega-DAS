@@ -51,6 +51,7 @@
         <item>¿Cuál es la capital de Australia?</item>
         <item>¿Cuál de los siguientes lenguajes de programación está diseñado principalmente para el desarrollo web?</item>
     </string-array>
+    <string name="title_activity_maps_geolocal">MapsGeolocalActivity</string>
 
 
 </resources>

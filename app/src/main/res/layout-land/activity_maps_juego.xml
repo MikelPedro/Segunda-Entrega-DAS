@@ -7,7 +7,7 @@
     tools:context=".MapsJuegoActivity">
 
     <fragment
-        android:id="@+id/map"
+        android:id="@+id/idMap"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="338dp"
         android:layout_height="252dp"

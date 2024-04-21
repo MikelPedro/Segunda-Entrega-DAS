@@ -135,20 +135,10 @@ public class MainActivity extends AppCompatActivity{
 
     public void OnClickMapas(View v){
 
-        Log.d("MAIN","ENTRA");
-        OperacionesBDMapas opBDMap = new OperacionesBDMapas(this,1);
-
-        Intent mapas = new Intent(this, MapsJuegoActivity.class);
-        Log.d("MAIN", String.valueOf(opBDMap.obtenerPregRandom()));
-        mapas.putExtra("idPregunta", opBDMap.obtenerPregRandom());
-        mapas.putExtra("pregCorrecta", 0);
-        mapas.putExtra("pregRespondida", 0);
+        Log.d("mapa","ENTRA");
+        Intent mapas = new Intent(this, MapsGeolocalActivity.class);
         this.startActivity(mapas);
         finish();
-
-
-
-
 
     }
 

@@ -1,7 +1,6 @@
 package com.example.primera_entrega_das;
 
 import androidx.fragment.app.FragmentActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -38,7 +37,7 @@ public class MapsJuegoActivity extends FragmentActivity implements OnMapReadyCal
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+                .findFragmentById(R.id.idMap);
 
         radioButtonR1 = findViewById(R.id.radioButtonMapa1);
         radioButtonR2 = findViewById(R.id.radioButtonMapa2);
@@ -71,12 +70,6 @@ public class MapsJuegoActivity extends FragmentActivity implements OnMapReadyCal
         Log.d("CIUDAD QUE CARGA", String.valueOf(cPregunta.getCiudad1()));
         //devolver resultado correcto de la pregunta
         respReal = cargarPregunta(cPregunta);
-
-        //Bundle extras = getIntent().getExtras();
-        //OperacionesBDMapas bd = new OperacionesBDMapas(this, 1);
-        //cargar info de la pregunta en el view
-        //cargarPregunta(bd.obtenerPregPorId(extras.getInt("idPregunta")));
-
 
         btnSigMap.setOnClickListener(new View.OnClickListener() {
             @Override
