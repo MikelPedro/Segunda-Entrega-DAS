@@ -15,7 +15,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class OperacionesBDMapas extends BDMapas{
+public class OperacionesBDMapas extends BDMaps{
 
 
     public OperacionesBDMapas(@Nullable Context context, int version) {
@@ -29,7 +29,7 @@ public class OperacionesBDMapas extends BDMapas{
         Cursor cu1;
 
         //Consulta sobre todos los temas (se seleccionan todos los ids)
-        cu1 = dbmap.rawQuery("SELECT idM FROM MAPAS", null);
+        cu1 = dbmap.rawQuery("SELECT idMap FROM MAPAS", null);
         Log.d("BD", "donde hay problema");
 
         while(cu1.moveToNext()){
@@ -64,7 +64,7 @@ public class OperacionesBDMapas extends BDMapas{
         elId[0] = Integer.toString(id);
 
         //Consulta a realizar en base al tema que se ha seleccionado en la app
-        Cursor cu1 = dbmap.rawQuery("SELECT * FROM MAPAS WHERE id=?", elId);
+        Cursor cu1 = dbmap.rawQuery("SELECT * FROM MAPAS WHERE idMap=?", elId);
 
 
         cu1.moveToNext();
@@ -86,18 +86,18 @@ public class OperacionesBDMapas extends BDMapas{
         SQLiteDatabase db = getWritableDatabase();
         try {
             if (context != null) {
-                InputStream preguntasinputStream = context.getResources().openRawResource(R.raw.mapaspreg);
-                BufferedReader preguntasbufferedReader = new BufferedReader(new InputStreamReader(preguntasinputStream));
+                InputStream mapasinputStream = context.getResources().openRawResource(R.raw.mapaspreg);
+                BufferedReader mapasbufferedReader = new BufferedReader(new InputStreamReader(mapasinputStream));
 
                 String line;
-                while ((line = preguntasbufferedReader.readLine()) != null) {
+                while ((line = mapasbufferedReader.readLine()) != null) {
                     // Ejecutar cada sentencia INSERT
                     db.execSQL(line);
                     Log.d("BD2", "Sentencia SQL: " + line);
                 }
 
-                preguntasbufferedReader.close();
-                preguntasinputStream.close();
+                mapasbufferedReader.close();
+                mapasinputStream.close();
 
             } else {
                 Log.d("BD", "Context es nulo");
@@ -110,6 +110,13 @@ public class OperacionesBDMapas extends BDMapas{
             e.printStackTrace();
         }
     }
+
+    public void vaciarTablaPreguntas() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete("MAPAS", null, null);
+        db.close();
+    }
+
 }
 
 

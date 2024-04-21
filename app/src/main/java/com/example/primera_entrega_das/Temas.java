@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ public class Temas extends AppCompatActivity implements RecyclerViewInterface{
 
     //imagenes que se usan en los CardViews
     int[] imagenes = {R.drawable.baseline_computer_24,R.drawable.baseline_brush_24,R.drawable.baseline_sports_football_24,
-                        R.drawable.baseline_map_24, R.drawable.baseline_science_24};
+                        R.drawable.baseline_map_24, R.drawable.baseline_science_24, R.drawable.baseline_public_24};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,12 +49,24 @@ public class Temas extends AppCompatActivity implements RecyclerViewInterface{
     //Metodo el cual se va a llamar al darle click en un tema del recycler view
     @Override
     public void onItemClick(int posicion) {
+        if (posicion==5){
+            Log.d("MAIN","ENTRA");
+            OperacionesBDMapas opBDMap = new OperacionesBDMapas(this,1);
 
-        Intent intent = new Intent(Temas.this,IntermedioJugarCrear.class);
-        //guardar en el intent el nombre del tema e id de la imagen
-        intent.putExtra("Tema",modeloTemas.get(posicion).getTitulo());
-        intent.putExtra("Imagen",modeloTemas.get(posicion).getImagenId());
-        startActivity(intent);
-        finish();
+            Intent mapas = new Intent(Temas.this, MapsJuegoActivity.class);
+            Log.d("MAIN", String.valueOf(opBDMap.obtenerPregRandom()));
+            mapas.putExtra("idPregunta", opBDMap.obtenerPregRandom());
+            mapas.putExtra("pregCorrecta", 0);
+            mapas.putExtra("pregRespondida", 0);
+            this.startActivity(mapas);
+            finish();
+        }else {
+            Intent intent = new Intent(Temas.this, IntermedioJugarCrear.class);
+            //guardar en el intent el nombre del tema e id de la imagen
+            intent.putExtra("Tema", modeloTemas.get(posicion).getTitulo());
+            intent.putExtra("Imagen", modeloTemas.get(posicion).getImagenId());
+            startActivity(intent);
+            finish();
+        }
     }
 }

@@ -64,6 +64,7 @@ public class MainActivity extends AppCompatActivity{
         OperacionesBD bd = new OperacionesBD(this, 1);
         OperacionesBDMapas bdm = new OperacionesBDMapas(this, 1);
         // Llamada al método cargarPreguntasEnBD para cargar todas las preguntas de un archivo en la BD
+        bdm.vaciarTablaPreguntas();
         bdm.cargarPreguntasEnBDMapas(this);
         bd.cargarPreguntasEnBD(this);
 

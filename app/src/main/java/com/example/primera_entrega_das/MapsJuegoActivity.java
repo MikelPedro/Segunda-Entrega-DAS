@@ -1,9 +1,6 @@
 package com.example.primera_entrega_das;
 
 import androidx.fragment.app.FragmentActivity;
-import androidx.work.Data;
-import androidx.work.OneTimeWorkRequest;
-import androidx.work.WorkManager;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,11 +8,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
-
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -26,19 +18,10 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.example.primera_entrega_das.databinding.ActivityMapsJuegoBinding;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.concurrent.atomic.AtomicInteger;
-
-
 public class MapsJuegoActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap elmapa;
     private ActivityMapsJuegoBinding binding;
-
-    private double lat;
-    private double longi;
     private String respReal = "";
 
     private RadioButton radioButtonR1, radioButtonR2, radioButtonR3;
@@ -67,13 +50,6 @@ public class MapsJuegoActivity extends FragmentActivity implements OnMapReadyCal
         super.getIntent().putExtra("pregCorrecta",super.getIntent().getExtras().getInt("pregCorrecta"));
         super.getIntent().putExtra("pregRespondida",super.getIntent().getExtras().getInt("pregRespondida"));
 
-        OperacionesBDMapas bd = new OperacionesBDMapas(this, 1);
-        //obtener un objeto ciudadPregunta en base al id que se obtiene del intent
-        cPregunta = bd.obtenerPregPorId(super.getIntent().getExtras().getInt("idPregunta"));
-
-        //devolver resultado correcto de la pregunta
-
-        respReal = cargarPregunta(cPregunta);
 
         // Obtener el mapa asíncronamente
         mapFragment.getMapAsync(this);
@@ -87,43 +63,27 @@ public class MapsJuegoActivity extends FragmentActivity implements OnMapReadyCal
         googleMap.setMapStyle(
                 MapStyleOptions.loadRawResourceStyle(
                         this, R.raw.mapa_estilo));
-        // Add a marker in Sydney and move the camera
-        /*
-        LatLng sydney = new LatLng(-34, 151);
-        elmapa.addMarker(new MarkerOptions().position(sydney).title("¿Dónde estoy?"));
-        elmapa.moveCamera(CameraUpdateFactory.newLatLng(sydney));
 
-        // Crear una cámara con zoom y movimiento hacia la posición del marcador
-        CameraPosition cameraPosition = new CameraPosition.Builder()
-                .target(sydney)
-                .zoom(10)
-                .build();
 
-        // Mover la cámara hacia la posición del marcador con animación
-        elmapa.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-        */
-        //obtener un objeto ciudadPregunta en base al id que se obtiene del intent
-        //cPregunta = bd.obtenerMapaPorId(super.getIntent().getExtras().getInt("idPregunta"));
-        //this.obtCiudad(super.getIntent().getExtras().getInt("idPregunta"));
-        //devolver resultado correcto de la pregunta
-        //respReal = this.obtCiudad(super.getIntent().getExtras().getInt("idPregunta");
-
-    }
-
-    protected void onStart() {
-        super.onStart();
-
-        Bundle extras = getIntent().getExtras();
         OperacionesBDMapas bd = new OperacionesBDMapas(this, 1);
+        //obtener un objeto ciudadPregunta en base al id que se obtiene del intent
+        cPregunta = bd.obtenerPregPorId(super.getIntent().getExtras().getInt("idPregunta"));
+        Log.d("CIUDAD QUE CARGA", String.valueOf(cPregunta.getCiudad1()));
+        //devolver resultado correcto de la pregunta
+        respReal = cargarPregunta(cPregunta);
+
+        //Bundle extras = getIntent().getExtras();
+        //OperacionesBDMapas bd = new OperacionesBDMapas(this, 1);
         //cargar info de la pregunta en el view
-        cargarPregunta(bd.obtenerPregPorId(extras.getInt("idPregunta")));
+        //cargarPregunta(bd.obtenerPregPorId(extras.getInt("idPregunta")));
 
 
         btnSigMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String respUsu = obtenerRespuestaSeleccionada(radioButtonR1, radioButtonR2, radioButtonR3);
-
+                Log.d("RESPUSU",respUsu);
+                Log.d("RESPUSU","la real es: " + respReal);
                 //Comparar la respuesta real con la del usuario
                 if (respReal.equals(respUsu)) {
                     //sumar 1 punto al contador de preguntas correctas
@@ -180,7 +140,7 @@ public class MapsJuegoActivity extends FragmentActivity implements OnMapReadyCal
         // Crear una cámara con zoom y movimiento hacia la posición del marcador
         CameraPosition cameraPosition = new CameraPosition.Builder()
                 .target(nuevaPosicion)
-                .zoom(10)
+                .zoom(8)
                 .build();
 
         // Mover la cámara hacia la posición del marcador con animación
@@ -188,7 +148,6 @@ public class MapsJuegoActivity extends FragmentActivity implements OnMapReadyCal
 
         return respReal;
     }
-
 
     // Método para obtener la respuesta seleccionada de los RadioButtons
     private String obtenerRespuestaSeleccionada(RadioButton radioButtonR1, RadioButton radioButtonR2, RadioButton radioButtonR3) {
