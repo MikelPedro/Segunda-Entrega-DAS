@@ -84,42 +84,41 @@ public class MapsGeolocalActivity extends FragmentActivity implements OnMapReady
         UiSettings uiSettings = mMap.getUiSettings();
         uiSettings.setZoomControlsEnabled(true);
 
-        // Pedir permisos de ubicación en caso de no estar concedidos
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    MY_PERMISSIONS_REQUEST_LOCATION);
-        }
-
-
-        proveedordelocalizacion.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
-            @Override
-            public void onSuccess(Location location) {
-                if (location != null) {
-                    Log.d("GEO","llega aqui");
-                    textlat.setText("Latitud: " + location.getLatitude());
-                    textlongi.setText("Longitud: " + location.getLongitude());
-                    LatLng miUbicacion = new LatLng(location.getLatitude(), location.getLongitude());
-
-                    // Personalizar el icono del marcador
-                    mMap.addMarker(new MarkerOptions().position(miUbicacion).title("Mi ubicación").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(miUbicacion, 15));
-                } else {
-                    textlat.setText("Latitud: (desconocida)");
-                    textlongi.setText("Longitud: (desconocida)");
-                    Log.d("maps", "Posicion desconocida");
-                }
-            }
-        });
-
         // Habilitar la capa de mi ubicación
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             mMap.setMyLocationEnabled(true);
         }
+
+        // Crear el LocationRequest
+        peticion = LocationRequest.create()
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                .setInterval(10 * 60 * 1000) // Actualizar cada 10 minutos
+                .setFastestInterval(5 * 60 * 1000); // Actualizar cada 5 minutos
+
+        // Crear el LocationCallback
+        actualizador = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                super.onLocationResult(locationResult);
+                if (locationResult != null) {
+                    Location location = locationResult.getLastLocation();
+                    LatLng posicion = new LatLng(location.getLatitude(), location.getLongitude());
+                    if (currentLocationMarker == null) {
+                        MarkerOptions markerOptions = new MarkerOptions();
+                        markerOptions.position(posicion);
+                        markerOptions.title("Estoy aquí!!");
+                        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE));
+                        currentLocationMarker = mMap.addMarker(markerOptions);
+                    } else {
+                        currentLocationMarker.setPosition(posicion);
+                    }
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(posicion, 15));
+                }
+            }
+        };
+
+        // Solicitar actualizaciones de ubicación
+        proveedordelocalizacion.requestLocationUpdates(peticion, actualizador, null);
 
 
     }
