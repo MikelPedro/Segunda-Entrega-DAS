@@ -22,6 +22,35 @@
         <item>¿Puedes identificar una ciudad viendo un mapa?</item>
     </string-array>
     <string name="title_activity_maps_juego">MapsJuegoActivity</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+    <string name="app_widget_description">This is an app widget description</string>
+
+    <string-array name="preguntas_array">
+        <item>¿Quién fue Leonardo da Vinci?</item>
+        <item>¿Cuál es la capital de Francia?</item>
+        <item>¿Cuál es el símbolo químico del agua?</item>
+        <item>¿Quién inventó la bombilla eléctrica?</item>
+        <item>¿En qué año se fundó la NASA?</item>
+        <item>¿Cuál es el río más largo del mundo?</item>
+        <item>¿Cuál es el planeta más grande del sistema solar?</item>
+        <item>¿Quién fue Marie Curie?</item>
+        <item>¿Cuál es el deporte más popular del mundo?</item>
+        <item>¿En qué año se celebró la primera Copa Mundial de la FIFA?</item>
+        <item>¿Cuál es el metal más abundante en la corteza terrestre?</item>
+        <item>¿Cuál es la montaña más alta del mundo?</item>
+        <item>¿Cuál es el océano más grande del planeta?</item>
+        <item>¿En qué deporte se utiliza un bate y una pelota?</item>
+        <item>¿Quién es conocido como el "padre de la informática"?</item>
+        <item>¿Quién es el autor de la obra "La persistencia de la memoria"?</item>
+        <item>¿Qué ingeniero eléctrico inventó la bombilla?</item>
+        <item>¿Cuál es la obra más famosa de Leonardo da Vinci?</item>
+        <item>¿Cuál es el lenguaje de programación más utilizado en el desarrollo de aplicaciones móviles?</item>
+        <item>¿Qué siglas representan al formato de imagen sin pérdida ampliamente utilizado en la web?</item>
+        <item>¿Cuál es la capital de Brasil?</item>
+        <item>¿Cuál es la capital de Australia?</item>
+        <item>¿Cuál de los siguientes lenguajes de programación está diseñado principalmente para el desarrollo web?</item>
+    </string-array>
 
 
 </resources>
