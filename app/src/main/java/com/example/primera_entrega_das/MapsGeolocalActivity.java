@@ -8,9 +8,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.primera_entrega_das.databinding.ActivityMapsGeolocalBinding;
@@ -41,6 +43,7 @@ public class MapsGeolocalActivity extends FragmentActivity implements OnMapReady
     private TextView textlat, textlongi;
     private LocationCallback actualizador;
     private LocationRequest peticion;
+    private static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,50 +69,6 @@ public class MapsGeolocalActivity extends FragmentActivity implements OnMapReady
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        proveedordelocalizacion.getLastLocation()
-                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                    @Override
-                    public void onSuccess(Location location) {
-                        if (location != null) {
-
-                            textlat.setText("Latitud: " + location.getLatitude());
-                            textlongi.setText("Longitud: " + location.getLongitude());
-                        } else {
-                            textlat.setText("Latitud: (desconocida)");
-                            textlongi.setText("Longitud: (desconocida)");
-                        }
-                    }
-                })
-                .addOnFailureListener(this, new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                    }
-                });
-
-
-        peticion = new LocationRequest.Builder(10000)
-                .setMinUpdateIntervalMillis(5000)
-                .setPriority(Priority.PRIORITY_HIGH_ACCURACY)
-                .build();
-
-        LocationCallback actualizador = new LocationCallback() {
-            @Override
-            public void onLocationResult(LocationResult locationResult) {
-                super.onLocationResult(locationResult);
-                if (locationResult!=null){
-                    actualizarMarcador(locationResult);
-                    textlat.setText("Latitud: " +
-                            locationResult.getLastLocation().getLatitude());
-                    textlongi.setText("Longitud: " +
-                    locationResult.getLastLocation().getLongitude());
-                }
-                else{
-                    textlat.setText("Latitud: (desconocida)");
-                    textlongi.setText("Longitud: (desconocida)");
-                }
-            }
-        };
-
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -121,11 +80,47 @@ public class MapsGeolocalActivity extends FragmentActivity implements OnMapReady
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         UiSettings uiSettings = mMap.getUiSettings();
         uiSettings.setZoomControlsEnabled(true);
 
-        actualizarPosicion();
+        // Pedir permisos de ubicación en caso de no estar concedidos
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    MY_PERMISSIONS_REQUEST_LOCATION);
+        }
+
+
+        proveedordelocalizacion.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                if (location != null) {
+                    Log.d("GEO","llega aqui");
+                    textlat.setText("Latitud: " + location.getLatitude());
+                    textlongi.setText("Longitud: " + location.getLongitude());
+                    LatLng miUbicacion = new LatLng(location.getLatitude(), location.getLongitude());
+
+                    // Personalizar el icono del marcador
+                    mMap.addMarker(new MarkerOptions().position(miUbicacion).title("Mi ubicación").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(miUbicacion, 15));
+                } else {
+                    textlat.setText("Latitud: (desconocida)");
+                    textlongi.setText("Longitud: (desconocida)");
+                    Log.d("maps", "Posicion desconocida");
+                }
+            }
+        });
+
+        // Habilitar la capa de mi ubicación
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            mMap.setMyLocationEnabled(true);
+        }
+
 
     }
 
@@ -173,6 +168,25 @@ public class MapsGeolocalActivity extends FragmentActivity implements OnMapReady
         this.startActivity(geo);
         finish();
 
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == MY_PERMISSIONS_REQUEST_LOCATION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permiso de ubicación concedido, habilitar la capa de mi ubicación
+                if (ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.ACCESS_FINE_LOCATION)
+                        == PackageManager.PERMISSION_GRANTED) {
+                    mMap.setMyLocationEnabled(true);
+                }
+            } else {
+                // Permiso de ubicación denegado, mostrar mensaje al usuario
+                Toast.makeText(this, "Permiso de ubicación denegado", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
 }
