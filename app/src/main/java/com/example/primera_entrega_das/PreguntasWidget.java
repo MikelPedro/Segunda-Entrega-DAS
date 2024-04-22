@@ -45,7 +45,7 @@ public class PreguntasWidget extends AppWidgetProvider {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         // Establecer la alarma para actualizar el widget cada 5 minutos
-        long intervalMillis = 5 * 60 * 1000; // 10 minutos en milisegundos
+        long intervalMillis = 5 * 60 * 1000; // 5 minutos en milisegundos
         long triggerAtMillis = System.currentTimeMillis() + intervalMillis;
         alarmManager.setRepeating(AlarmManager.RTC, triggerAtMillis, intervalMillis, pendingIntent);
     }

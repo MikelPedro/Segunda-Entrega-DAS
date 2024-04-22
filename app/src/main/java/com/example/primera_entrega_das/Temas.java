@@ -51,13 +51,9 @@ public class Temas extends AppCompatActivity implements RecyclerViewInterface{
     public void onItemClick(int posicion) {
         if (posicion==5){
             Log.d("MAIN","ENTRA");
-            OperacionesBDMapas opBDMap = new OperacionesBDMapas(this,1);
-
-            Intent mapas = new Intent(Temas.this, MapsJuegoActivity.class);
-            Log.d("MAIN", String.valueOf(opBDMap.obtenerPregRandom()));
-            mapas.putExtra("idPregunta", opBDMap.obtenerPregRandom());
-            mapas.putExtra("pregCorrecta", 0);
-            mapas.putExtra("pregRespondida", 0);
+            Intent mapas = new Intent(Temas.this, IntermedioMapaGeo.class);
+            mapas.putExtra("Tema", modeloTemas.get(posicion).getTitulo());
+            mapas.putExtra("Imagen", modeloTemas.get(posicion).getImagenId());
             this.startActivity(mapas);
             finish();
         }else {
@@ -65,7 +61,7 @@ public class Temas extends AppCompatActivity implements RecyclerViewInterface{
             //guardar en el intent el nombre del tema e id de la imagen
             intent.putExtra("Tema", modeloTemas.get(posicion).getTitulo());
             intent.putExtra("Imagen", modeloTemas.get(posicion).getImagenId());
-            startActivity(intent);
+            this.startActivity(intent);
             finish();
         }
     }

@@ -9,35 +9,34 @@
     <fragment
         android:id="@+id/mapGeo"
         android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_width="386dp"
-        android:layout_height="446dp"
-        android:layout_marginTop="24dp"
+        android:layout_width="296dp"
+        android:layout_height="278dp"
+        android:layout_marginTop="20dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.48"
+        app:layout_constraintHorizontal_bias="0.078"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView5"
         tools:context=".MapsGeolocalActivity" />
 
     <Button
         android:id="@+id/btnVolverGeoLocal"
+        style="@style/AppBoton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="68dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginEnd="168dp"
         android:onClick="OnClickGeoVolver"
         android:text="Volver"
-        style="@style/AppBoton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewLat" />
 
     <TextView
         android:id="@+id/textView5"
-        android:layout_width="313dp"
-        android:layout_height="69dp"
-        android:layout_marginTop="32dp"
-        android:text="Geolocalizador:\n¿Dónde me encuentro?"
+        android:layout_width="317dp"
+        android:layout_height="51dp"
+        android:layout_marginTop="16dp"
         android:gravity="center_horizontal"
+        android:text="Geolocalizador:\n¿Dónde me encuentro?"
         android:textColor="@color/colorTextoBtn"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -49,20 +48,20 @@
         android:id="@+id/textViewLat"
         android:layout_width="132dp"
         android:layout_height="48dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="116dp"
         android:text="TextView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mapGeo" />
+        app:layout_constraintStart_toEndOf="@+id/mapGeo"
+        app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
     <TextView
         android:id="@+id/textViewLongi"
         android:layout_width="131dp"
         android:layout_height="45dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginTop="116dp"
+        android:layout_marginEnd="76dp"
         android:text="TextView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mapGeo" />
+        app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

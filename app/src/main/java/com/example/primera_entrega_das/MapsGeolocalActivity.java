@@ -1,8 +1,13 @@
 package com.example.primera_entrega_das;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,6 +32,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -37,138 +43,94 @@ import com.google.android.gms.tasks.OnSuccessListener;
 public class MapsGeolocalActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-    private ActivityMapsGeolocalBinding binding;
     private FusedLocationProviderClient proveedordelocalizacion;
-    private Marker currentLocationMarker;
+    private double lat,longi;
     private TextView textlat, textlongi;
-    private LocationCallback actualizador;
-    private LocationRequest peticion;
     private static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_maps_geolocal);
 
-        binding = ActivityMapsGeolocalBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.mapGeo);
+        mapFragment.getMapAsync(this);
 
         //Encontrar TextViews:
         textlat = findViewById(R.id.textViewLat);
         textlongi = findViewById(R.id.textViewLongi);
 
-        //Instanciar proveedor de posiciones
+        // Inicializar el cliente de ubicación fusionada
         proveedordelocalizacion = LocationServices.getFusedLocationProviderClient(this);
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.mapGeo);
-        mapFragment.getMapAsync(this);
-
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         UiSettings uiSettings = mMap.getUiSettings();
+        //Añadir zoom out/in para manejar mejor el mapa
         uiSettings.setZoomControlsEnabled(true);
 
-        // Habilitar la capa de mi ubicación
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+        // Solicitar permisos de ubicación en caso de no estar concedidos
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    MY_PERMISSIONS_REQUEST_LOCATION);
+        }
+
+        //Obtener la ultima ubicación conocida del usuario
+        proveedordelocalizacion.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                if (location != null) {
+                    lat = location.getLatitude();
+                    longi = location.getLongitude();
+                    LatLng posicionActual = new LatLng(lat, longi);
+                    Log.d("Geo","bien");
+                    // Añadir valores a lso textviews con la latitud y longitud
+                    textlat.setText("Latitud: " + String.valueOf(lat));
+                    textlongi.setText("Longitud: " + String.valueOf(longi));
+                    //Añadir marcador personalizado
+                    //mMap.addMarker(new MarkerOptions().position(posicionActual).title("Estoy aqui!!").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+                    // Obtener un BitmapDescriptor del vector asset y ajustar su tamaño
+
+                    mMap.addMarker(new MarkerOptions()
+                            .position(posicionActual)
+                            .icon(bitmapDescriptorFromVector(getApplicationContext(), R.drawable.baseline_person_24_superred))
+                            .title("Estoy aqui!!"));
+                    //Mover la camara a esa posicion
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(posicionActual, 15));
+                } else {
+                    Log.d("maps", "Posicion desconocida");
+                    textlat.setText("Latitud: Coordenadas no encontradas");
+                    textlongi.setText("Longitud: Coordenadas no encontradas");
+                }
+            }
+        });
+
+        // Habilitar mi ubicación si el permiso esta concedido
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
             mMap.setMyLocationEnabled(true);
         }
 
-        // Crear el LocationRequest
-        peticion = LocationRequest.create()
-                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                .setInterval(10 * 60 * 1000) // Actualizar cada 10 minutos
-                .setFastestInterval(5 * 60 * 1000); // Actualizar cada 5 minutos
-
-        // Crear el LocationCallback
-        actualizador = new LocationCallback() {
-            @Override
-            public void onLocationResult(LocationResult locationResult) {
-                super.onLocationResult(locationResult);
-                if (locationResult != null) {
-                    Location location = locationResult.getLastLocation();
-                    LatLng posicion = new LatLng(location.getLatitude(), location.getLongitude());
-                    if (currentLocationMarker == null) {
-                        MarkerOptions markerOptions = new MarkerOptions();
-                        markerOptions.position(posicion);
-                        markerOptions.title("Estoy aquí!!");
-                        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE));
-                        currentLocationMarker = mMap.addMarker(markerOptions);
-                    } else {
-                        currentLocationMarker.setPosition(posicion);
-                    }
-                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(posicion, 15));
-                }
-            }
-        };
-
-        // Solicitar actualizaciones de ubicación
-        proveedordelocalizacion.requestLocationUpdates(peticion, actualizador, null);
-
 
     }
 
-    private void actualizarMarcador(LocationResult locationResult){
-        if (locationResult != null) {
-            Location location = locationResult.getLastLocation();
-            LatLng posicion = new LatLng(location.getLatitude(), location.getLongitude());
-            if (currentLocationMarker == null) {
-                MarkerOptions markerOptions = new MarkerOptions();
-                markerOptions.position(posicion);
-                markerOptions.title("Estoy aquí!!");
-                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE));
-                currentLocationMarker = mMap.addMarker(markerOptions);
-            } else {
-                currentLocationMarker.setPosition(posicion);
-            }
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(posicion, 15));
-        }
-    }
-
-    private void actualizarPosicion(){
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        proveedordelocalizacion.requestLocationUpdates(peticion, actualizador, null);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        actualizarPosicion();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        //Detener la captura de los cambios de posición
-        proveedordelocalizacion.removeLocationUpdates(actualizador);
-    }
 
     public void OnClickGeoVolver(View v){
-        Log.d("mapa","SALE");
+        //Al darle click te lleva a la pagina main de la aplicación
+        Log.d("Geo","Sale de la pantalla");
         Intent geo = new Intent(this, MainActivity.class);
         this.startActivity(geo);
         finish();
-
     }
 
+    //Metodo para pedir permiso la primera vez que entra a la pantalla de geolocalización
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -182,10 +144,20 @@ public class MapsGeolocalActivity extends FragmentActivity implements OnMapReady
                     mMap.setMyLocationEnabled(true);
                 }
             } else {
-                // Permiso de ubicación denegado, mostrar mensaje al usuario
-                Toast.makeText(this, "Permiso de ubicación denegado", Toast.LENGTH_SHORT).show();
+                // Mostrar mensaje por pantalla
+                Toast.makeText(this, "El permiso de ubicacion ha sido rechazado", Toast.LENGTH_SHORT).show();
             }
         }
     }
+    //Codigo para crear un marcador personalizado
+    private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
+        Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorResId);
+        vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
+        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        vectorDrawable.draw(canvas);
+        return BitmapDescriptorFactory.fromBitmap(bitmap);
+    }
+
 
 }
