@@ -1,7 +1,13 @@
 package com.example.primera_entrega_das;
 
 import androidx.fragment.app.FragmentActivity;
+import androidx.preference.PreferenceManager;
+import androidx.work.Data;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
+
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -27,6 +33,7 @@ public class MapsJuegoActivity extends FragmentActivity implements OnMapReadyCal
     private Button btnSigMap;
 
     private CiudadPregunta cPregunta;
+    private String nomUsuario ="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +42,8 @@ public class MapsJuegoActivity extends FragmentActivity implements OnMapReadyCal
         binding = ActivityMapsJuegoBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        nomUsuario = preferences.getString("nombreUsu", "");
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.idMap);
@@ -95,6 +104,18 @@ public class MapsJuegoActivity extends FragmentActivity implements OnMapReadyCal
                     //Añadir al intent informacion sobre las preguntas acertadas y respondidas
                     intent.putExtra("pregCorrecta", MapsJuegoActivity.super.getIntent().getExtras().getInt("pregCorrecta"));
                     intent.putExtra("pregRespondida", MapsJuegoActivity.super.getIntent().getExtras().getInt("pregRespondida"));
+
+                    Data datosObtPts = new Data.Builder()
+                            .putString("nom",nomUsuario)
+                            .putInt("ptsBD",MapsJuegoActivity.super.getIntent().getExtras().getInt("pregCorrecta"))
+                            .putString("reg","actpts")
+                            .build();
+
+                    OneTimeWorkRequest otwrPerfil = new OneTimeWorkRequest.Builder(ConexionBDRemota.class)
+                            .setInputData(datosObtPts)
+                            .build();
+
+                    WorkManager.getInstance(getApplicationContext()).enqueue(otwrPerfil);
 
                     // Limpia el historial de preguntas que han aparecido en la partida
                     OperacionesBD.vaciarHistorial();

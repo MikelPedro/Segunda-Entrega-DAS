@@ -35,7 +35,7 @@ public class PerfilUsuario extends AppCompatActivity {
     private static final int REQUEST_CAMERA_PERMISSION = 10;
     private String nomUsuario = "";
     private ImageView imgPerfil;
-    private TextView tvNombre;
+    private TextView tvNombre,textViewPts;
     private Bitmap laminiatura;
 
 
@@ -63,6 +63,7 @@ public class PerfilUsuario extends AppCompatActivity {
         setContentView(R.layout.activity_perfil_usuario);
 
         tvNombre = findViewById(R.id.textViewNombre);
+        textViewPts = findViewById(R.id.textViewPts);
         imgPerfil = findViewById(R.id.imagePerfil);
 
         //Obtener de las preferencias el nombre de usuario que ha iniciado sesion
@@ -76,6 +77,36 @@ public class PerfilUsuario extends AppCompatActivity {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         nomUsuario = preferences.getString("nombreUsu", "");
         tvNombre.setText("Nombre: " + nomUsuario);
+
+        //Obtener pts del usuario
+        Data datosObtPts = new Data.Builder()
+                .putString("nom",nomUsuario)
+                .putString("reg","obtpts")
+                .build();
+
+        OneTimeWorkRequest otwrPerfil = new OneTimeWorkRequest.Builder(ConexionBDRemota.class)
+                .setInputData(datosObtPts)
+                .build();
+
+        WorkManager.getInstance(this).getWorkInfoByIdLiveData(otwrPerfil.getId())
+                .observe(this, new Observer<WorkInfo>() {
+                    @Override
+                    public void onChanged(WorkInfo workInfo) {
+                        if(workInfo != null && workInfo.getState().isFinished()){
+                            Data outputData = workInfo.getOutputData();
+                            int puntos = outputData.getInt("pts", -1); // -1 es un valor predeterminado en caso de que no se encuentren puntos
+                            if (puntos != -1) {
+                                textViewPts.setText("Mis puntos globales: " + String.valueOf(puntos));
+                                Log.d("PERFIL", "Puntos obtenidos: " + puntos);
+                            } else {
+                                textViewPts.setText("Mis puntos globales: desconocido");
+                                Log.e("PERFIL", "No se pudieron obtener los puntos");
+                            }
+                        }
+                    }
+                });
+        WorkManager.getInstance(this).enqueue(otwrPerfil);
+
     }
 
     public void OnClickAbrirCamara(View v){
@@ -127,8 +158,7 @@ public class PerfilUsuario extends AppCompatActivity {
 
     }
 
-
-    //si no tiene foto de perfil que se hace ?
+    //Obtener foto de perfil y cargarla en el imageView
     private void obtenerImagenPerfil() {
 
         //Para mandar los datos a la bd

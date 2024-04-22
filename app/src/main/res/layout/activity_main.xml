@@ -65,15 +65,4 @@
         app:layout_constraintTop_toBottomOf="@+id/textView2"
         app:srcCompat="@drawable/mainimagen_icono" />
 
-    <Button
-        android:id="@+id/btnMapa"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="52dp"
-        android:onClick="OnClickMapas"
-        android:text="Mapa prueb"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

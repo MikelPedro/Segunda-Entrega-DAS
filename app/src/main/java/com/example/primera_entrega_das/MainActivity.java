@@ -1,52 +1,22 @@
 package com.example.primera_entrega_das;
 
-import static android.content.ContentValues.TAG;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.Manifest;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
-import androidx.lifecycle.LiveData;
-import androidx.work.Configuration;
-import androidx.work.Data;
-import androidx.work.ExistingPeriodicWorkPolicy;
-import androidx.work.ExistingWorkPolicy;
-import androidx.work.OneTimeWorkRequest;
-import androidx.work.Operation;
-import androidx.work.PeriodicWorkRequest;
-import androidx.work.WorkContinuation;
-import androidx.work.WorkInfo;
-import androidx.work.WorkManager;
-import androidx.work.WorkQuery;
-import androidx.work.WorkRequest;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.common.util.concurrent.ListenableFuture;
-import com.google.firebase.messaging.FirebaseMessaging;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.List;
-import java.util.UUID;
-
-import kotlinx.coroutines.flow.Flow;
 
 public class MainActivity extends AppCompatActivity{
 
@@ -131,15 +101,6 @@ public class MainActivity extends AppCompatActivity{
         Intent perfil = new Intent(this,PerfilUsuario.class);
         perfil.putExtra("nombreUsu",nombreUsu);
         this.startActivity(perfil);
-    }
-
-    public void OnClickMapas(View v){
-
-        Log.d("mapa","ENTRA");
-        Intent mapas = new Intent(this, MapsGeolocalActivity.class);
-        this.startActivity(mapas);
-        finish();
-
     }
 
 }

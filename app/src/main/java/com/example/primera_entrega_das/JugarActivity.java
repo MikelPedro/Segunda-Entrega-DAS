@@ -1,7 +1,13 @@
 package com.example.primera_entrega_das;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceManager;
+import androidx.work.Data;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
+
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -22,10 +28,14 @@ public class JugarActivity extends AppCompatActivity {
     private ModeloPregunta mPregunta;
 
     private ImageView imgJugar;
+    private String nomUsuario = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         super.setContentView(R.layout.activity_jugar);
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        nomUsuario = preferences.getString("nombreUsu", "");
 
         //Obtener la informacion guardada en el intent
         super.getIntent().putExtra("idPregunta", super.getIntent().getExtras().getInt("idPregunta"));
@@ -89,6 +99,20 @@ public class JugarActivity extends AppCompatActivity {
                     //Añadir al intent informacion sobre las preguntas acertadas y respondidas
                     intent.putExtra("pregCorrecta", JugarActivity.super.getIntent().getExtras().getInt("pregCorrecta"));
                     intent.putExtra("pregRespondida", JugarActivity.super.getIntent().getExtras().getInt("pregRespondida"));
+
+                    //Llamar a un worker para guardar los puntos de un usuario en la bd remota
+                    //Añadir la info necesaria en un objeto Data
+                    Data datosObtPts = new Data.Builder()
+                            .putString("nom",nomUsuario)
+                            .putInt("ptsBD",JugarActivity.super.getIntent().getExtras().getInt("pregCorrecta"))
+                            .putString("reg","actpts")
+                            .build();
+
+                    OneTimeWorkRequest otwrPerfil = new OneTimeWorkRequest.Builder(ConexionBDRemota.class)
+                            .setInputData(datosObtPts)
+                            .build();
+
+                    WorkManager.getInstance(getApplicationContext()).enqueue(otwrPerfil);
 
                     // Limpia el historial de preguntas que han aparecido en la partida
                     OperacionesBD.vaciarHistorial();
