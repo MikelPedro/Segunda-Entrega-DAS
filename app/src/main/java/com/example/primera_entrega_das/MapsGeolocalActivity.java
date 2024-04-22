@@ -44,7 +44,7 @@ public class MapsGeolocalActivity extends FragmentActivity implements OnMapReady
 
     private GoogleMap mMap;
     private FusedLocationProviderClient proveedordelocalizacion;
-    private double lat,longi;
+    private double lat, longi;
     private TextView textlat, textlongi;
     private static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
 
@@ -63,6 +63,18 @@ public class MapsGeolocalActivity extends FragmentActivity implements OnMapReady
 
         // Inicializar el cliente de ubicación fusionada
         proveedordelocalizacion = LocationServices.getFusedLocationProviderClient(this);
+
+        // Solicitar permisos de ubicación en caso de no estar concedidos
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    MY_PERMISSIONS_REQUEST_LOCATION);
+        } else {
+            obtenerUbicacion();
+        }
+
     }
 
     @Override
@@ -72,16 +84,21 @@ public class MapsGeolocalActivity extends FragmentActivity implements OnMapReady
         //Añadir zoom out/in para manejar mejor el mapa
         uiSettings.setZoomControlsEnabled(true);
 
-        // Solicitar permisos de ubicación en caso de no estar concedidos
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    MY_PERMISSIONS_REQUEST_LOCATION);
-        }
+    }
+
+    private void obtenerUbicacion() {
 
         //Obtener la ultima ubicación conocida del usuario
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
         proveedordelocalizacion.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
@@ -89,7 +106,7 @@ public class MapsGeolocalActivity extends FragmentActivity implements OnMapReady
                     lat = location.getLatitude();
                     longi = location.getLongitude();
                     LatLng posicionActual = new LatLng(lat, longi);
-                    Log.d("Geo","bien");
+                    Log.d("Geo", "bien");
                     // Añadir valores a lso textviews con la latitud y longitud
                     textlat.setText("Latitud: " + String.valueOf(lat));
                     textlongi.setText("Longitud: " + String.valueOf(longi));
@@ -137,18 +154,15 @@ public class MapsGeolocalActivity extends FragmentActivity implements OnMapReady
 
         if (requestCode == MY_PERMISSIONS_REQUEST_LOCATION) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permiso de ubicación concedido, habilitar la capa de mi ubicación
-                if (ContextCompat.checkSelfPermission(this,
-                        Manifest.permission.ACCESS_FINE_LOCATION)
-                        == PackageManager.PERMISSION_GRANTED) {
-                    mMap.setMyLocationEnabled(true);
-                }
-            } else {
-                // Mostrar mensaje por pantalla
-                Toast.makeText(this, "El permiso de ubicacion ha sido rechazado", Toast.LENGTH_SHORT).show();
+                obtenerUbicacion();
             }
+        } else {
+            // Mostrar mensaje por pantalla
+            Toast.makeText(this, "El permiso de ubicacion ha sido rechazado", Toast.LENGTH_SHORT).show();
         }
+
     }
+
     //Codigo para crear un marcador personalizado
     private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
         Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorResId);

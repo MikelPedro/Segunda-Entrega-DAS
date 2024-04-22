@@ -18,20 +18,21 @@
         app:layout_constraintTop_toBottomOf="@+id/textView4"
         tools:context=".MapsActivity" />
 
+
     <Button
         android:id="@+id/btnMapSig"
+        style="@style/AppBoton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:onClick="onClick"
         android:text="Siguiente Pregunta"
-        style="@style/AppBoton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.803"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/radioGroup2"
-        app:layout_constraintVertical_bias="0.428" />
-
+        app:layout_constraintVertical_bias="0.396" />
 
     <TextView
         android:id="@+id/textView4"
