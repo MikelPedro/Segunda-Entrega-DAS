@@ -9,8 +9,7 @@
         android:id="@+id/appwidget_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        android:textColor="@color/colorBoton1"
         android:textSize="20sp"
-        android:textStyle="bold"
-        android:textColor="@color/colorBoton1" />
+        android:textStyle="bold" />
 </RelativeLayout>
