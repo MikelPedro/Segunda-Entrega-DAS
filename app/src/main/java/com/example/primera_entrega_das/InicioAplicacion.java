@@ -78,48 +78,53 @@ public class InicioAplicacion extends AppCompatActivity{
                     .observe(this, new Observer<WorkInfo>() {
                         @Override
                         public void onChanged(WorkInfo workInfo) {
-                            if(workInfo != null && workInfo.getState() == WorkInfo.State.SUCCEEDED){
-                                Log.d("LOGIN", "despues del workmanager");
+                            if(workInfo != null){
+                                Log.d("WORKINFO",String.valueOf(workInfo.getState()));
+                                if(workInfo.getState() == WorkInfo.State.SUCCEEDED){
+                                    Log.d("LOGIN", "despues del workmanager");
 
-                                //Guardar en preferences el nombre de usuario que ha iniciado sesión.
-                                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                                SharedPreferences.Editor editor = preferences.edit();
-                                editor.putString("nombreUsu", nombre);
-                                editor.apply();
+                                    //Guardar en preferences el nombre de usuario que ha iniciado sesión.
+                                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                                    SharedPreferences.Editor editor = preferences.edit();
+                                    editor.putString("nombreUsu", nombre);
+                                    editor.apply();
 
-                                //Obtener token y subir a bd remota
-                                FirebaseMessaging.getInstance().getToken()
-                                        .addOnCompleteListener(new OnCompleteListener<String>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<String> task) {
-                                                if (!task.isSuccessful()) {
-                                                    Log.w("TOKEN", "Fetching FCM registration token failed", task.getException());
-                                                    return;
+                                    //Obtener token y subir a bd remota
+                                    FirebaseMessaging.getInstance().getToken()
+                                            .addOnCompleteListener(new OnCompleteListener<String>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<String> task) {
+                                                    if (!task.isSuccessful()) {
+                                                        Log.w("TOKEN", "Fetching FCM registration token failed", task.getException());
+                                                        return;
+                                                    }
+                                                    // Get new FCM registration token
+                                                    token = task.getResult();
+                                                    Log.d("TOKEN", token);
+
+                                                    Log.d("TOKEN", "despues del firebase"+token);
+                                                    Data datosToken = new Data.Builder()
+                                                            .putString("nom",nombre)
+                                                            .putString("token",token)
+                                                            .putString("reg","subirtoken")
+                                                            .build();
+
+                                                    OneTimeWorkRequest otwr2 = new OneTimeWorkRequest.Builder(ConexionBDRemota.class)
+                                                            .setInputData(datosToken)
+                                                            .build();
+
+                                                    WorkManager.getInstance(InicioAplicacion.this).enqueue(otwr2);
                                                 }
-                                                // Get new FCM registration token
-                                                token = task.getResult();
-                                                Log.d("TOKEN", token);
+                                            });
 
-                                                Log.d("TOKEN", "despues del firebase"+token);
-                                                Data datosToken = new Data.Builder()
-                                                        .putString("nom",nombre)
-                                                        .putString("token",token)
-                                                        .putString("reg","subirtoken")
-                                                        .build();
-
-                                                OneTimeWorkRequest otwr2 = new OneTimeWorkRequest.Builder(ConexionBDRemota.class)
-                                                        .setInputData(datosToken)
-                                                        .build();
-
-                                                WorkManager.getInstance(InicioAplicacion.this).enqueue(otwr2);
-                                            }
-                                        });
-
-                                // Iniciar la actividad principal (MainActivity) si el result es success.
-                                Intent main = new Intent(InicioAplicacion.this, MainActivity.class);
-                                main.putExtra("nombreUsu", nombre); // Se pasa el nombre de usuario
-                                startActivity(main);
-                                finish(); // Cerrar la actividad de inicio de sesión
+                                    // Iniciar la actividad principal (MainActivity) si el result es success.
+                                    Intent main = new Intent(InicioAplicacion.this, MainActivity.class);
+                                    main.putExtra("nombreUsu", nombre); // Se pasa el nombre de usuario
+                                    startActivity(main);
+                                    finish(); // Cerrar la actividad de inicio de sesión
+                                }else if (workInfo.getState() == WorkInfo.State.FAILED){
+                                    Toast.makeText(getApplicationContext(), "Usuario no registrado", Toast.LENGTH_SHORT).show();
+                                }
                             }
                         }
                     });

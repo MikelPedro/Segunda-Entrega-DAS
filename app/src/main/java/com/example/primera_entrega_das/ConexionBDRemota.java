@@ -5,12 +5,16 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.util.Log;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.work.Data;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
@@ -31,6 +35,7 @@ public class ConexionBDRemota extends Worker {
         String reg = getInputData().getString("reg");
 
         if (reg.equals("si")){
+            Log.d("registro","entra en dowork");
             return registro(nomUsu,contraseña);
         }else if(reg.equals("subir")){
             String foto64 = getInputData().getString("imagen");
@@ -60,31 +65,53 @@ public class ConexionBDRemota extends Worker {
     public Result login(String nomUsu, String contraseña) {
 
         // Construir la URL: IP + PUERTO para el PHP de login
-        String direccion = "http://35.230.19.155:81/login.php";
-        String parametros = "nombre="+nomUsu+"&contraseña="+contraseña;
+        String direccion = "http://35.230.19.155:81/login.php?";
 
         HttpURLConnection urlConnection = null;
 
         try {
-            URL destino = new URL(direccion);
+            Uri.Builder builder = new Uri.Builder()
+                    .appendQueryParameter("nombre", nomUsu)
+                    .appendQueryParameter("contraseña", contraseña);
+            String parametrosURL = builder.build().getEncodedQuery();
+
+            URL destino = new URL(direccion+parametrosURL);
             urlConnection = (HttpURLConnection) destino.openConnection();
             urlConnection.setConnectTimeout(5000);
             urlConnection.setReadTimeout(5000);
 
-            urlConnection.setRequestMethod("POST");
-            urlConnection.setDoOutput(true);
-            urlConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+            Log.d("DESTINO",String.valueOf(destino));
+            urlConnection.setRequestMethod("GET");
 
-            //Añadir parametros a la URI
-            PrintWriter out = new PrintWriter(urlConnection.getOutputStream());
-            out.print(parametros);
-            out.close();
+
             int statusCode = urlConnection.getResponseCode();
 
+            if (statusCode == 200) {
+                InputStream inputStream = new BufferedInputStream(urlConnection.getInputStream());
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+                StringBuilder stringBuilder = new StringBuilder();
+                String line;
+                while ((line = bufferedReader.readLine()) != null) {
+                    stringBuilder.append(line);
+                }
+                bufferedReader.close();
+                inputStream.close();
 
-            Log.d("LOGIN", String.valueOf(statusCode));
-            // Leer la respuesta del servidor
-            return Result.success();
+                // Aquí obtienes la respuesta del servidor
+                String response = stringBuilder.toString();
+                Log.d("LOGIN","respuesta: " + response);
+                if (response.equals("Inicio de sesión exitoso")) {
+                    // Usuario y contraseña correctos
+                    return Result.success();
+                } else {
+                    // Usuario o contraseña incorrectos
+                    // Tu código para manejar el caso de usuario o contraseña incorrectos
+                    return Result.failure();
+                }
+            } else {
+                // Si la respuesta es diferente a 200
+                return Result.failure();
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -97,32 +124,55 @@ public class ConexionBDRemota extends Worker {
         }
     }
 
+
     public Result registro(String nomUsu, String contraseña) {
         // método de registro aquí
         // Construir la URL: IP + PUERTO para el PHP de registro
-        String direccion = "http://35.230.19.155:81/registro.php";
-        String parametros = "nombre="+nomUsu+"&contraseña="+contraseña;
+        String direccion = "http://35.230.19.155:81/registro.php?";
 
         HttpURLConnection urlConnection;
         try {
+            //Construir URI con los parametros
+            Uri.Builder builder = new Uri.Builder()
+                    .appendQueryParameter("nombre", nomUsu)
+                    .appendQueryParameter("contraseña", contraseña);
+            String parametrosURL = builder.build().getEncodedQuery();
+
             //Conexion a la URI
-            URL destino = new URL(direccion);
+            URL destino = new URL(direccion + parametrosURL);
             urlConnection = (HttpURLConnection) destino.openConnection();
             urlConnection.setConnectTimeout(5000);
             urlConnection.setReadTimeout(5000);
-            Log.d("REGISTRO","ENTRA");
-            //POST
-            urlConnection.setRequestMethod("POST");
-            urlConnection.setDoOutput(true);
-            urlConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+            Log.d("REGISTRO",String.valueOf(destino));
 
-            //Añadir parametros a la URI
-            PrintWriter out = new PrintWriter(urlConnection.getOutputStream());
-            out.print(parametros);
-            out.close();
-            int statusCode = urlConnection.getResponseCode();
-            Log.d("REGISTRO",String.valueOf(statusCode));
-            return Result.success();
+            urlConnection.setRequestMethod("GET");
+
+
+
+            int codigo = urlConnection.getResponseCode();
+            if (codigo == 200) {
+
+                // Leer la respuesta como una cadena
+                BufferedReader reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+                StringBuilder response = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    response.append(line);
+                }
+                reader.close();
+
+                String respuesta = response.toString();
+                Log.d("RESPUESTA",respuesta);
+                if (respuesta.equals("usuario_existe")) {
+                    return Result.failure();
+                } else if (respuesta.equals("registro_exitoso")) {
+                    return Result.success();
+                } else {
+                    return Result.failure();
+                }
+            }else{
+                return Result.failure();
+            }
         }catch (Exception e){
             e.printStackTrace();
             Log.d("REGISTRO","EXCEPCION");

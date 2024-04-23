@@ -55,7 +55,10 @@ public class MapsGeolocalActivity extends FragmentActivity implements OnMapReady
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.mapGeo);
-        mapFragment.getMapAsync(this);
+        // Se verifica si mMap ya está inicializado
+        if (mMap == null) {
+            mapFragment.getMapAsync(this);
+        }
 
         //Encontrar TextViews:
         textlat = findViewById(R.id.textViewLat);
@@ -120,6 +123,12 @@ public class MapsGeolocalActivity extends FragmentActivity implements OnMapReady
                             .title("Estoy aqui!!"));
                     //Mover la camara a esa posicion
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(posicionActual, 15));
+                    // Habilitar mi ubicación si el permiso esta concedido
+                    if (ContextCompat.checkSelfPermission(MapsGeolocalActivity.this,
+                            Manifest.permission.ACCESS_FINE_LOCATION)
+                            == PackageManager.PERMISSION_GRANTED) {
+                        mMap.setMyLocationEnabled(true);
+                    }
                 } else {
                     Log.d("maps", "Posicion desconocida");
                     textlat.setText("Latitud: Coordenadas no encontradas");
@@ -128,12 +137,6 @@ public class MapsGeolocalActivity extends FragmentActivity implements OnMapReady
             }
         });
 
-        // Habilitar mi ubicación si el permiso esta concedido
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            mMap.setMyLocationEnabled(true);
-        }
 
 
     }

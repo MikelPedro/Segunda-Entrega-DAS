@@ -3,8 +3,10 @@ package com.example.primera_entrega_das;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.Observer;
 import androidx.work.Data;
 import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
 
 import android.content.Intent;
@@ -56,9 +58,6 @@ public class RegisterLogin extends AppCompatActivity {
 
         //Comprobar que ninguno de los campos esta vacio
         if (!nombre.isEmpty() && !contraseña.isEmpty()) {
-            //Mostrar dialogo para volver a la pantalla de inicio
-            DialogFragment dialogo = new DialogoRegistro();
-            dialogo.show(getSupportFragmentManager(), "dialogoReg");
 
             //Para mandar los datos a la bd
             Data datos = new Data.Builder()
@@ -71,6 +70,26 @@ public class RegisterLogin extends AppCompatActivity {
             OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(ConexionBDRemota.class)
                     .setInputData(datos)
                     .build();
+
+            // Observador para la respuesta del trabajo
+            WorkManager.getInstance(this).getWorkInfoByIdLiveData(otwr.getId())
+                    .observe(this, new Observer<WorkInfo>() {
+                        @Override
+                        public void onChanged(WorkInfo workInfo) {
+                            if (workInfo != null && workInfo.getState().isFinished()) {
+                                // Obtener el estado del trabajo
+                                if (workInfo.getState() == WorkInfo.State.SUCCEEDED) {
+                                    // Si el registro es exitoso
+                                    //Mostrar dialogo para volver a la pantalla de inicio
+                                    DialogFragment dialogo = new DialogoRegistro();
+                                    dialogo.show(getSupportFragmentManager(), "dialogoReg");
+                                } else if (workInfo.getState() == WorkInfo.State.FAILED) {
+                                    // Error en el registro
+                                    Toast.makeText(getApplicationContext(), "Error, ese nombre ya está registrado", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }
+                    });
 
             WorkManager.getInstance(this).enqueue(otwr);
 
